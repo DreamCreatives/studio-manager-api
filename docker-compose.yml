@@ -1,0 +1,6 @@
+﻿services:
+  studiomanager.api:
+    image: studiomanager.api
+    build:
+      context: .
+      dockerfile: StudioManager.API/Dockerfile
