@@ -5,6 +5,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CE3FDE3B-F991-4566-A97C-D7520119F8EF}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+		.github\workflows\build_test.yaml = .github\workflows\build_test.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Infrastructure", "StudioManager.Infrastructure\StudioManager.Infrastructure.csproj", "{08F62C62-D31E-4E64-929F-D5DBF0C78E10}"
