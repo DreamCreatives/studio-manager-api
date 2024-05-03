@@ -29,9 +29,6 @@ jobs:
         
       - name: Test
         run: dotnet test --configuration Release --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage"
-
-      - name: Codecov
-        uses: codecov/codecov-action@v4
         
       - name: Combine Coverage Reports
         uses: danielpalme/ReportGenerator-GitHub-Action@5.2.4
