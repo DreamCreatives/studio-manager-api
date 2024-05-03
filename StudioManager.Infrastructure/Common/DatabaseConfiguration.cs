@@ -1,4 +1,4 @@
-﻿namespace SolutionManager.Infrastructure.Common;
+﻿namespace StudioManager.Infrastructure.Common;
 
 public class DatabaseConfiguration
 {

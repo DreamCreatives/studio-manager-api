@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using StudioManager.Domain.Entities;
 
 namespace StudioManager.Domain.EntitiesConfiguration;
 
+[ExcludeFromCodeCoverage]
 public sealed class EquipmentTypeConfiguration : IEntityTypeConfiguration<EquipmentType>
 {
     public void Configure(EntityTypeBuilder<EquipmentType> builder)

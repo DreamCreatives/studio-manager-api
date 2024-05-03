@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SolutionManager.Infrastructure.Common;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using StudioManager.Infrastructure.Common;
 
-namespace SolutionManager.Infrastructure;
+namespace StudioManager.Infrastructure;
 
+[ExcludeFromCodeCoverage]
 public sealed class StudioManagerDbContext
     (DbContextOptions<StudioManagerDbContext> options) : DbContextBase(options);

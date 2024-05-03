@@ -1,4 +1,4 @@
-﻿namespace SolutionManager.Infrastructure.Common;
+﻿namespace StudioManager.Infrastructure.Common;
 
 public sealed class DatabaseConfigurationNode(
     string password, string userName, string connectionDetails)

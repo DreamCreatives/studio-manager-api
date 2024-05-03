@@ -1,13 +1,15 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using StudioManager.Domain.Entities;
 using StudioManager.Domain.ErrorMessages;
 
-namespace SolutionManager.Infrastructure.Common;
+namespace StudioManager.Infrastructure.Common;
 
+[ExcludeFromCodeCoverage]
 public abstract class DbContextBase(
-    DbContextOptions<StudioManagerDbContext> options) : DbContext(options)
+    DbContextOptions options) : DbContext(options)
 {
     public DbSet<EquipmentType> EquipmentTypes { get; set; }
     

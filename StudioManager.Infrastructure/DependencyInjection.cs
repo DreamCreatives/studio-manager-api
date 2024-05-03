@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SolutionManager.Infrastructure.Common;
+using StudioManager.Infrastructure.Common;
 
-namespace SolutionManager.Infrastructure;
+namespace StudioManager.Infrastructure;
 
+[ExcludeFromCodeCoverage]
 public static class DependencyInjection
 {
     public static void RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
