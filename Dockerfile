@@ -7,11 +7,11 @@ COPY ["StudioManager.API/StudioManager.API.csproj", "StudioManager.API/"]
 RUN dotnet restore "StudioManager.API/StudioManager.API.csproj"
 COPY . .
 WORKDIR "/src/StudioManager.API"
-RUN dotnet build "StudioManager.API.csproj" -c release -o /app/build
+RUN dotnet build "StudioManager.API.csproj" --no-restore -c release -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "StudioManager.API.csproj" -c release -o /app/publish
+RUN dotnet publish "StudioManager.API.csproj" --no-build --no-restore -c release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
