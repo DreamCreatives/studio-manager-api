@@ -10,7 +10,7 @@ on:
   
 jobs:
   build:
-    name: Restore and Build
+    name: Restore, Build and Test
     runs-on: ubuntu-latest
 
     steps:
