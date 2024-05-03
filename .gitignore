@@ -12,6 +12,8 @@
 *.sln.docstates
 postgres-data
 postgres-data/*
+.containers/*
+.containers
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
