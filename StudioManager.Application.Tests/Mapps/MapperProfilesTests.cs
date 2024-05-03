@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using StudioManager.Tests.Common.AutoMapperExtensions;
+using Xunit;
 
 namespace StudioManager.Application.Tests.Mapps;
 

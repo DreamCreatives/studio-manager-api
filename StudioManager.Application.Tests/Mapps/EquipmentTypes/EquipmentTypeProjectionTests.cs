@@ -3,6 +3,7 @@ using FluentAssertions;
 using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Domain.Entities;
 using StudioManager.Tests.Common.AutoMapperExtensions;
+using Xunit;
 
 namespace StudioManager.Application.Tests.Mapps.EquipmentTypes;
 
