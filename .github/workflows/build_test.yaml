@@ -28,7 +28,7 @@ jobs:
         run: dotnet build --configuration Release
         
       - name: Test
-        run: dotnet test --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage"
+        run: dotnet test --no-build --verbosity diagnostic --logger trx --collect:"XPlat Code Coverage"
 
       - name: Codecov
         uses: codecov/codecov-action@v4
