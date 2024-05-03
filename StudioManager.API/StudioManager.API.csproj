@@ -23,6 +23,7 @@
     
     
     <ItemGroup>
+      <ProjectReference Include="..\StudioManager.API.Contracts\StudioManager.API.Contracts.csproj" />
       <ProjectReference Include="..\StudioManager.Application\StudioManager.Application.csproj" />
       <ProjectReference Include="..\StudioManager.Infrastructure\StudioManager.Infrastructure.csproj" />
     </ItemGroup>

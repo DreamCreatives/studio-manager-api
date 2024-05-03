@@ -1,15 +1,15 @@
 ﻿using System.Net;
 
-namespace StudioManager.Domain.Common;
+namespace StudioManager.Domain.Common.Results;
 
-public sealed class CommandResult
+public sealed class CommandResult : IRequestResult<object?>
 {
-    public bool Succeeded { get; private set; }
-    public HttpStatusCode StatusCode { get; private set; }
-    public object? Data { get; private set; }
-    public string? Error { get; private set; }
+    public bool Succeeded { get; set; }
+    public HttpStatusCode StatusCode { get; set; }
+    public object? Data { get; set; }
+    public string? Error { get; set; }
     
-    public static CommandResult Success(object? data)
+    public static CommandResult Success(object? data = null)
     {
         return new CommandResult
         {
@@ -19,13 +19,13 @@ public sealed class CommandResult
         };
     }
     
-    public static CommandResult NotFound(string error)
+    public static CommandResult NotFound<T>(object? id = null)
     {
         return new CommandResult
         {
             Succeeded = false,
             Data = default!,
-            Error = error,
+            Error = $"[NOT FOUND] {typeof(T).Name} with id {id} does not exist",
             StatusCode = HttpStatusCode.NotFound
         };
     }

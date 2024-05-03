@@ -1,9 +1,9 @@
-using System.Reflection;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using StudioManager.Infrastructure;
 using StudioManager.API.Behaviours;
 using StudioManager.API.Common;
+using StudioManager.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,15 +11,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
 
-
 builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterInfrastructure(builder.Configuration);
-
-builder.Services.AddMediatR(config =>
-{
-    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-});
+builder.Services.RegisterApplication();
 
 builder.Services.AddBehavior(typeof(RequestLoggingBehavior<,>));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

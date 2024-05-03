@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using MediatR;
 using StudioManager.Domain.Common;
+using StudioManager.Domain.Common.Results;
 
 namespace StudioManager.API.Behaviours;
 

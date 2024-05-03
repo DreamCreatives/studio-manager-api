@@ -35,7 +35,7 @@ public abstract class DbContextBase(
         _transaction.Dispose();
         _transaction = null;
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

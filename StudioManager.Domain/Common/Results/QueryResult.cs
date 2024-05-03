@@ -1,13 +1,13 @@
 ﻿using System.Net;
 
-namespace StudioManager.Domain.Common;
+namespace StudioManager.Domain.Common.Results;
 
-public class QueryResult<T>
+public class QueryResult<T> : IRequestResult<T>
 {
-    public bool Succeeded { get; private set; }
-    public HttpStatusCode StatusCode { get; private set; }
-    public T? Data { get; private set; }
-    public string? Error { get; private set; }
+    public bool Succeeded { get; set; }
+    public HttpStatusCode StatusCode { get; set; }
+    public T? Data { get; set; }
+    public string? Error { get; set; }
     
     public static QueryResult<T> Success(T data)
     {
