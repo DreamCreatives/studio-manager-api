@@ -11,30 +11,23 @@ namespace StudioManager.API.Base;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
+[Produces(contentType: "application/json", "application/problem+json")]
 [ExcludeFromCodeCoverage]
 //[Authorize(Policy = "AuthorizedUser")]
 public abstract class CoreController(ISender sender) : ControllerBase
 {
-    protected readonly ISender Sender = sender;
-    
-    
-    internal async Task<IResult> SendAsync<T>(IRequest<IRequestResult<T>> request)
+    internal async Task<IResult> SendAsync(IRequest<CommandResult> request)
     {
-        var result = await Sender.Send(request);
+        var result = await sender.Send(request);
 
         return CreateResult(result);
     }
     
-    internal async Task<IResult> SendAsync<T>(IRequest<T> request)
+    internal async Task<IResult> SendAsync<T>(IRequest<QueryResult<T>> request)
     {
-        var result = await Sender.Send(request);
+        var result = await sender.Send(request);
 
         return CreateResult(result);
-    }
-
-    private static IResult CreateResult(object? data)
-    {
-        return Results.Ok(data);
     }
 
     private static IResult CreateResult<T>(IRequestResult<T> requestResult)

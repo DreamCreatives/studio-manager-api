@@ -4,10 +4,10 @@ namespace StudioManager.Domain.Common.Results;
 
 public class QueryResult<T> : IRequestResult<T>
 {
-    public bool Succeeded { get; set; }
-    public HttpStatusCode StatusCode { get; set; }
-    public T? Data { get; set; }
-    public string? Error { get; set; }
+    public bool Succeeded { get; private init; }
+    public HttpStatusCode StatusCode { get; private init; }
+    public T? Data { get; private init; }
+    public string? Error { get; private init; }
     
     public static QueryResult<T> Success(T data)
     {
@@ -15,7 +15,8 @@ public class QueryResult<T> : IRequestResult<T>
         {
             Succeeded = true,
             Data = data,
-            Error = null
+            Error = null,
+            StatusCode = HttpStatusCode.OK
         };
     }
     

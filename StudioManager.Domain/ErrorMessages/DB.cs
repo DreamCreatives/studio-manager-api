@@ -8,7 +8,7 @@ public static class DB
     
     #region EquipmentType
     
-    public const string EQUIPMENT_TYPE_NON_UNIQUE_NAME = "Equipment type with this name already exists";
+    public const string EQUIPMENT_TYPE_DUPLICATE_NAME = "Equipment type with this name already exists";
     
     #endregion
     

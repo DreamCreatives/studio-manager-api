@@ -15,11 +15,10 @@ public static class DependencyInjection
         
         ArgumentNullException.ThrowIfNull(databaseConfiguration, nameof(databaseConfiguration));
         
-        services.RegisterDbContext<StudioManagerDbContext>(databaseConfiguration.Write);
-        services.RegisterDbContext<StudioManagerReadDbContext>(databaseConfiguration.Read);
+        services.RegisterPooledDbContext<StudioManagerDbContext>(databaseConfiguration.Write);
     }
 
-    private static void RegisterDbContext<TContext>(this IServiceCollection services, DatabaseConfigurationNode connectionDetails)
+    private static void RegisterPooledDbContext<TContext>(this IServiceCollection services, DatabaseConfigurationNode connectionDetails)
         where TContext : DbContextBase
     {
         var connectionString = connectionDetails.GetConnectionString();

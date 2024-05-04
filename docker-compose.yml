@@ -9,7 +9,10 @@
       POSTGRES_PASSWORD: P@ssw0rd
       POSTGRES_DB: StudioManager
     healthcheck:
-      test: "exit 0"
+      test: 'pg_isready -U postgres --dbname=StudioManager'
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - ./.containers/studiomanager-db:/var/lib/postgresql/data
     restart: unless-stopped

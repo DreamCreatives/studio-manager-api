@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudioManager.API.Base;
 using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Application.EquipmentTypes.Create;
+using StudioManager.Application.EquipmentTypes.Delete;
 using StudioManager.Application.EquipmentTypes.GetAll;
 using StudioManager.Application.EquipmentTypes.Update;
 using StudioManager.Domain.Common.Results;
@@ -34,7 +35,7 @@ public class EquipmentTypesController(ISender sender) : CoreController(sender)
     }
     
     [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<EquipmentTypeReadDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<EquipmentTypeReadDto>), StatusCodes.Status200OK)]
     public async Task<IResult> GetEquipmentTypesAsync(
         [FromQuery] string? ft = null)
     {
@@ -43,11 +44,19 @@ public class EquipmentTypesController(ISender sender) : CoreController(sender)
         return await SendAsync(query);
     }
     
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
+    public async Task<IResult> DeleteEquipmentTypeAsync(Guid id)
+    {
+        var command = new DeleteEquipmentTypeCommand(id);
+        return await SendAsync(command);
+    }
+    
     private static EquipmentTypeFilter CreateFilter(string? ft)
     {
         return new EquipmentTypeFilter
         {
-            Name = ft
+            Search = ft
         };
     }
 }

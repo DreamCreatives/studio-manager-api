@@ -2,10 +2,10 @@
 
 namespace StudioManager.Domain.Common.Results;
 
-public interface IRequestResult<T>
+public interface IRequestResult<out T>
 {
-    public bool Succeeded { get; set; }
-    public HttpStatusCode StatusCode { get; set; }
-    public T? Data { get; set; }
-    public string? Error { get; set; }
+    public bool Succeeded { get; }
+    public HttpStatusCode StatusCode { get; }
+    public T? Data { get; }
+    public string? Error { get; }
 }

@@ -18,24 +18,25 @@ public sealed class UpdateEquipmentTypeCommandHandler(
         try
         {
             await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-            var filter = CreateFilter();
-            var dbEquipmentType = await dbContext.EquipmentTypes.FirstOrDefaultAsync(filter.ToQuery(), cancellationToken);
-            if (dbEquipmentType is null)
-            {
-                return CommandResult.NotFound<EquipmentType>();
-            }
-
-            filter = CreateUniqueFilter();
             
+            var filter = EquipmentTypeFilter.Unique(request.Id, request.EquipmentType.Name);
             var exists = await dbContext.EquipmentTypeExistsAsync(filter, cancellationToken);
             
             if (exists)
             {
-                return CommandResult.Conflict(DB.EQUIPMENT_TYPE_NON_UNIQUE_NAME);
+                return CommandResult.Conflict(DB.EQUIPMENT_TYPE_DUPLICATE_NAME);
+            }
+            
+            filter = CreateFilter();
+            var dbEquipmentType = await dbContext.EquipmentTypes.FirstOrDefaultAsync(filter.ToQuery(), cancellationToken);
+            if (dbEquipmentType is null)
+            {
+                return CommandResult.NotFound<EquipmentType>(request.Id);
             }
             
             dbEquipmentType.Update(request.EquipmentType.Name);
 
+            await dbContext.SaveChangesAsync(cancellationToken);
             return CommandResult.Success();
         }
         catch (DbUpdateException e)
@@ -43,7 +44,6 @@ public sealed class UpdateEquipmentTypeCommandHandler(
             return CommandResult.UnexpectedError(e.Message);
         }
         
-        EquipmentTypeFilter CreateUniqueFilter() => new() { Id = request.Id, Name = request.EquipmentType.Name };
         EquipmentTypeFilter CreateFilter() => new() { Id = request.Id };
     }
 }

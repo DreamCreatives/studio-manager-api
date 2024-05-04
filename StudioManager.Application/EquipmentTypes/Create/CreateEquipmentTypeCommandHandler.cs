@@ -23,7 +23,7 @@ public sealed class CreateEquipmentTypeCommandHandler(
 
             if (exists)
             {
-                return CommandResult.Conflict(DB.EQUIPMENT_TYPE_NON_UNIQUE_NAME);
+                return CommandResult.Conflict(DB.EQUIPMENT_TYPE_DUPLICATE_NAME);
             }
         
             var equipmentType = EquipmentType.Create(request.EquipmentType.Name);
@@ -37,6 +37,6 @@ public sealed class CreateEquipmentTypeCommandHandler(
             return CommandResult.UnexpectedError(e.Message);
         }
 
-        EquipmentTypeFilter CreateFilter() => new() { Name = request.EquipmentType.Name };
+        EquipmentTypeFilter CreateFilter() => new() { Search = request.EquipmentType.Name };
     }
 }

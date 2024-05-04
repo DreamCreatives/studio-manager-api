@@ -7,7 +7,7 @@ public sealed class CommandResult : IRequestResult<object?>
     public bool Succeeded { get; set; }
     public HttpStatusCode StatusCode { get; set; }
     public object? Data { get; set; }
-    public string? Error { get; set; }
+    public string? Error { get; init; }
     
     public static CommandResult Success(object? data = null)
     {
@@ -15,17 +15,22 @@ public sealed class CommandResult : IRequestResult<object?>
         {
             Succeeded = true,
             Data = data,
-            Error = null
+            Error = null,
+            StatusCode = HttpStatusCode.OK
         };
     }
     
     public static CommandResult NotFound<T>(object? id = null)
     {
+        var message = id is not null
+            ? $"[NOT FOUND] {typeof(T).Name} with id '{id}' does not exist"
+            : $"[NOT FOUND] {typeof(T).Name} does not exist";
+            
         return new CommandResult
         {
             Succeeded = false,
             Data = default!,
-            Error = $"[NOT FOUND] {typeof(T).Name} with id {id} does not exist",
+            Error = message,
             StatusCode = HttpStatusCode.NotFound
         };
     }

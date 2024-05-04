@@ -1,7 +1,7 @@
 using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
+using StudioManager.API;
 using StudioManager.Infrastructure;
-using StudioManager.API.Behaviours;
 using StudioManager.API.Common;
 using StudioManager.Application;
 
@@ -15,8 +15,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterInfrastructure(builder.Configuration);
 builder.Services.RegisterApplication();
+builder.Services.RegisterApi();
 
-builder.Services.AddBehavior(typeof(RequestLoggingBehavior<,>));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
