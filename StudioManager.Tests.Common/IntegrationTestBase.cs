@@ -16,8 +16,8 @@ public abstract class IntegrationTestBase
     protected const HttpStatusCode OkStatusCode = HttpStatusCode.OK;
     protected const HttpStatusCode ConflictStatusCode = HttpStatusCode.Conflict;
     protected const HttpStatusCode NotFoundStatusCode = HttpStatusCode.NotFound;
-    
-    protected TestDbMigrator<StudioManagerDbContext> DbMigrator { get; private set; }
+
+    protected TestDbMigrator<StudioManagerDbContext> DbMigrator { get; private set; } = null!;
 
     [OneTimeSetUp]
     public async Task SetupContainersAsync()

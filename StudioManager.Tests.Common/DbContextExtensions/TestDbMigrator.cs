@@ -8,11 +8,11 @@ public class TestDbMigrator<TContext>
 {
     private PostgreSqlContainer _postgresContainer = null!;
 
-    public async Task<string> StartDbAsync()
+    public async Task StartDbAsync()
     {
         _postgresContainer = new PostgreSqlBuilder().WithDatabase("testdb").Build();
         await _postgresContainer.StartAsync();
-        return _postgresContainer.GetConnectionString();
+        _postgresContainer.GetConnectionString();
     }
 
     public async Task<string> MigrateDbAsync()
