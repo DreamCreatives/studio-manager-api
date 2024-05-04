@@ -12,7 +12,7 @@ public class TestDbContextFactory<TContext>(string? connectionString) : IDbConte
     
     public TContext CreateDbContext()
     {
-        throw new NotImplementedException("This method should not be called. Use CreateDbContextAsync instead.");
+        throw new InvalidOperationException("This method should not be called. Use CreateDbContextAsync instead.");
     }
 
     public Task<TContext> CreateDbContextAsync(CancellationToken cancellationToken = default)
