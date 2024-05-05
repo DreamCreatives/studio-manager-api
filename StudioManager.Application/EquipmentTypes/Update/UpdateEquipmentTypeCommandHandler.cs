@@ -45,6 +45,6 @@ public sealed class UpdateEquipmentTypeCommandHandler(
         }
         
         EquipmentTypeFilter CreateFilter() => new() { Id = request.Id };
-        EquipmentTypeFilter CreateUniqueFilter() => new() { Id = request.Id, ExactName = request.EquipmentType.Name};
+        EquipmentTypeFilter CreateUniqueFilter() => new() { NotId = request.Id, ExactName = request.EquipmentType.Name};
     }
 }

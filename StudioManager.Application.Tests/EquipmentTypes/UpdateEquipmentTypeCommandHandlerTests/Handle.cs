@@ -35,7 +35,7 @@ public sealed class Handle : IntegrationTestBase
             await EquipmentTypeTestContextHelper.AddEquipmentTypeAsync(dbContext, equipmentType);
         }
 
-        var command = new UpdateEquipmentTypeCommand(equipmentType.Id, new EquipmentTypeWriteDto(equipmentType.Name));
+        var command = new UpdateEquipmentTypeCommand(Guid.NewGuid(), new EquipmentTypeWriteDto(equipmentType.Name));
         
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
