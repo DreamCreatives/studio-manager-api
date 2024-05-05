@@ -24,6 +24,8 @@ public sealed class EquipmentTypeFilter : IFilter<EquipmentType>
             (!NotId.HasValue || equipmentType.Id != NotId) &&
             (lowerExactName == null || lowerExactName.Length == 0 || equipmentType.Name.ToLower().Equals(lowerExactName)) &&
             (lowerName == null || lowerName.Length == 0 || equipmentType.Name.ToLower().Equals(lowerName)) &&
-            (lowerSearch == null || lowerSearch.Length == 0 || equipmentType.Name.ToLower().Contains(lowerSearch));
+            (lowerSearch == null || lowerSearch.Length == 0 || 
+             equipmentType.Id.ToString().ToLower().Equals(lowerSearch) ||
+             equipmentType.Name.ToLower().Contains(lowerSearch));
     }
 }
