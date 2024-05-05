@@ -8,6 +8,16 @@ using StudioManager.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(option =>
+{
+    option.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .SetIsOriginAllowed(_ => true)
+            .AllowCredentials();
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -22,29 +32,18 @@ builder.Services.RegisterApi();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-builder.Services.AddCors(opt =>
-{
-    opt.AddDefaultPolicy(
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
-});
-
 var app = builder.Build();
-
-app.UseExceptionHandler();
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
 app.UseRouting();
 
-app.UseCors();
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 app.UseAuthentication();
 
+app.UseStaticFiles();
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
