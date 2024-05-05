@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Application.EquipmentTypes.Update;
-using StudioManager.Application.Tests.EquipmentTypes.Common;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Domain.ErrorMessages;
@@ -32,7 +31,7 @@ public sealed class Handle : IntegrationTestBase
         var equipmentType = EquipmentType.Create("Test-Equipment-Type");
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
-            await EquipmentTypeTestContextHelper.AddEquipmentTypeAsync(dbContext, equipmentType);
+            await AddEntitiesToTable(dbContext, equipmentType);
         }
 
         var command = new UpdateEquipmentTypeCommand(Guid.NewGuid(), new EquipmentTypeWriteDto(equipmentType.Name));
@@ -55,7 +54,7 @@ public sealed class Handle : IntegrationTestBase
         // Arrange
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
-            await EquipmentTypeTestContextHelper.ClearEquipmentTypesAsync(dbContext);
+            await ClearTableContentsForAsync<EquipmentType>(dbContext);
         }
         
         var equipmentType = EquipmentType.Create("Test-Equipment-Type");
@@ -80,7 +79,7 @@ public sealed class Handle : IntegrationTestBase
         var equipmentType = EquipmentType.Create("Test-Equipment-Type");
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
-            await EquipmentTypeTestContextHelper.AddEquipmentTypeAsync(dbContext, equipmentType);
+            await AddEntitiesToTable(dbContext, equipmentType);
         }
         equipmentType.Update("Updated-Equipment-Type");
         var command = new UpdateEquipmentTypeCommand(equipmentType.Id, new EquipmentTypeWriteDto(equipmentType.Name));

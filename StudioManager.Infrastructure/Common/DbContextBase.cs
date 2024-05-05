@@ -12,6 +12,7 @@ public abstract class DbContextBase(
     DbContextOptions options) : DbContext(options)
 {
     public DbSet<EquipmentType> EquipmentTypes { get; set; }
+    public DbSet<Equipment> Equipments { get; set; }
     
     private bool HasOpenTransaction => _transaction is not null;
     private IDbContextTransaction? _transaction;

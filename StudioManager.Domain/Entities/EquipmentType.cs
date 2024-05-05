@@ -2,7 +2,13 @@
 
 public sealed class EquipmentType : EntityBase
 {
-    public string Name { get; private set; } = null!;
+    public string Name { get; private set; } = default!;
+    
+    #region EntityRelations
+    
+    public IQueryable<Equipment> Equipments { get; set; } = default!;
+
+    #endregion
     
     public void Update(string name)
     {

@@ -13,3 +13,12 @@ public static class DB
     #endregion
     
 }
+
+public static class DB_FORMAT
+{
+    #region Equipment
+    
+    public const string EQUIPMENT_DUPLICATE_NAME_TYPE = "Equipment with name {0} and type {1} already exists";
+    
+    #endregion
+}

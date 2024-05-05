@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Application.EquipmentTypes.GetAll;
-using StudioManager.Application.Tests.EquipmentTypes.Common;
 using StudioManager.Domain.Entities;
 using StudioManager.Domain.Filters;
 using StudioManager.Infrastructure;
@@ -30,7 +29,7 @@ public sealed class Handle : IntegrationTestBase
         // Arrange
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync())
         {
-            await EquipmentTypeTestContextHelper.ClearEquipmentTypesAsync(dbContext);
+            await ClearTableContentsForAsync<EquipmentType>(dbContext);
         }
         
         var query = new GetEquipmentTypesQuery { Filter = new EquipmentTypeFilter() };
@@ -54,9 +53,9 @@ public sealed class Handle : IntegrationTestBase
         // Arrange
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync())
         {
-            await EquipmentTypeTestContextHelper.ClearEquipmentTypesAsync(dbContext);
+            await ClearTableContentsForAsync<EquipmentType>(dbContext);
             var equipmentTypes = Enumerable.Range(0, 5).Select(x => EquipmentType.Create(x.ToString())).ToArray();
-            await EquipmentTypeTestContextHelper.AddEquipmentTypeAsync(dbContext, equipmentTypes);
+            await AddEntitiesToTable(dbContext, equipmentTypes);
         }
         
         var query = new GetEquipmentTypesQuery { Filter = new EquipmentTypeFilter() };
@@ -81,9 +80,9 @@ public sealed class Handle : IntegrationTestBase
         // Arrange
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync())
         {
-            await EquipmentTypeTestContextHelper.ClearEquipmentTypesAsync(dbContext);
+            await ClearTableContentsForAsync<EquipmentType>(dbContext);
             var equipmentTypes = Enumerable.Range(0, 5).Select(x => EquipmentType.Create(x.ToString())).ToArray();
-            await EquipmentTypeTestContextHelper.AddEquipmentTypeAsync(dbContext, equipmentTypes);
+            await AddEntitiesToTable(dbContext, equipmentTypes);
         }
         
         var query = new GetEquipmentTypesQuery { Filter = new EquipmentTypeFilter { Name = "1" } };
