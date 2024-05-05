@@ -14,6 +14,6 @@ public static class DependencyInjection
             opt.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
         });
 
-        services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies(), includeInternalTypes: true);
     }
 }

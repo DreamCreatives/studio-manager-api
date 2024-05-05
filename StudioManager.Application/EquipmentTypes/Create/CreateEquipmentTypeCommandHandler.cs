@@ -34,9 +34,9 @@ public sealed class CreateEquipmentTypeCommandHandler(
         }
         catch (DbUpdateException e)
         {
-            return CommandResult.UnexpectedError(e.Message);
+            return CommandResult.UnexpectedError(e);
         }
 
-        EquipmentTypeFilter CreateFilter() => new() { Search = request.EquipmentType.Name };
+        EquipmentTypeFilter CreateFilter() => new() { ExactName = request.EquipmentType.Name };
     }
 }

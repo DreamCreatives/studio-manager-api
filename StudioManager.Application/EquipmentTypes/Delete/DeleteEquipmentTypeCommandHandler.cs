@@ -31,7 +31,7 @@ public sealed class DeleteEquipmentTypeCommandHandler(
         }
         catch (DbUpdateException e)
         {
-            return CommandResult.UnexpectedError(e.Message);
+            return CommandResult.UnexpectedError(e);
         }
     }
 }

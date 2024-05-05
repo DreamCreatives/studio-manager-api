@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using StudioManager.API;
@@ -35,6 +36,14 @@ app.UseSwaggerUI(options =>
             $"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant()); 
     } 
 });
+
+app.UseCors(opt =>
+{
+    opt.AllowAnyOrigin();
+    opt.AllowAnyMethod();
+    opt.AllowAnyHeader();
+});
+
 app.UseHttpsRedirection();
 
 app.MapControllers();
@@ -47,3 +56,6 @@ await using (var scope = app.Services.CreateAsyncScope())
 }
 
 await app.RunAsync();
+
+[ExcludeFromCodeCoverage]
+public partial class Program;

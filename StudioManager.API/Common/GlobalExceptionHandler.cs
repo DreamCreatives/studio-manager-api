@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,11 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         Exception exception,
         CancellationToken cancellationToken)
     {
+        if (exception is ValidationException validationException)
+        {
+            return await HandleValidationExceptionAsync(httpContext, validationException, cancellationToken);
+        }
+        
         logger.LogError(exception, "[ERROR]: Error occurred while handling request {@Request}",exception.TargetSite?.DeclaringType?.FullName);
 
         var problemDetails = new ProblemDetails
@@ -23,6 +29,22 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         };
 
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        return true;
+    }
+    
+    private static async Task<bool> HandleValidationExceptionAsync(HttpContext httpContext, ValidationException exception, CancellationToken cancellationToken)
+    {
+        var problemDetails = new ValidationProblemDetails(exception.Errors.ToDictionary(x => x.PropertyName, x => new[] { x.ErrorMessage }))
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "Validation error",
+            Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1",
+            Detail = "One or more validation errors occurred."
+        };
+
+        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
 
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
         return true;
