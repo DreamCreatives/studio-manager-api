@@ -8,6 +8,16 @@ using StudioManager.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddDefaultPolicy(pol =>
+    {
+        pol.AllowAnyHeader();
+        pol.AllowAnyMethod();
+        pol.AllowAnyOrigin();
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
@@ -23,6 +33,17 @@ builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseCors(opt =>
+{
+    opt.AllowAnyOrigin();
+    opt.AllowAnyMethod();
+    opt.AllowAnyHeader();
+});
+
 app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
@@ -36,15 +57,6 @@ app.UseSwaggerUI(options =>
             $"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant()); 
     } 
 });
-
-app.UseCors(opt =>
-{
-    opt.AllowAnyOrigin();
-    opt.AllowAnyMethod();
-    opt.AllowAnyHeader();
-});
-
-app.UseHttpsRedirection();
 
 app.MapControllers();
 
