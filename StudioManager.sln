@@ -5,7 +5,22 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CE3FDE3B-F991-4566-A97C-D7520119F8EF}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
+		.github\workflows\build_test.yaml = .github\workflows\build_test.yaml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Infrastructure", "StudioManager.Infrastructure\StudioManager.Infrastructure.csproj", "{08F62C62-D31E-4E64-929F-D5DBF0C78E10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Domain", "StudioManager.Domain\StudioManager.Domain.csproj", "{06559F47-5258-4441-89AC-057730657EDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Application", "StudioManager.Application\StudioManager.Application.csproj", "{BC75F719-E734-48AF-93E8-EF369F9FAC4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.API.Contracts", "StudioManager.API.Contracts\StudioManager.API.Contracts.csproj", "{95C183F3-C9A4-4FA7-A122-1216AD92BDC0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{83545C4A-3E03-4336-8AE3-B06E8836DE35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Application.Tests", "StudioManager.Application.Tests\StudioManager.Application.Tests.csproj", "{F030658C-CEB0-47C1-95C5-E6BFC183D338}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Tests.Common", "StudioManager.Tests.Common\StudioManager.Tests.Common.csproj", "{8F76B06F-B382-4ECD-9F87-B4F9180CB25C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,5 +32,33 @@ Global
 		{402E88D4-3705-4523-B31F-03F00DDA0A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{402E88D4-3705-4523-B31F-03F00DDA0A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{402E88D4-3705-4523-B31F-03F00DDA0A61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08F62C62-D31E-4E64-929F-D5DBF0C78E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08F62C62-D31E-4E64-929F-D5DBF0C78E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08F62C62-D31E-4E64-929F-D5DBF0C78E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08F62C62-D31E-4E64-929F-D5DBF0C78E10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06559F47-5258-4441-89AC-057730657EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06559F47-5258-4441-89AC-057730657EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06559F47-5258-4441-89AC-057730657EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06559F47-5258-4441-89AC-057730657EDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC75F719-E734-48AF-93E8-EF369F9FAC4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC75F719-E734-48AF-93E8-EF369F9FAC4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC75F719-E734-48AF-93E8-EF369F9FAC4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC75F719-E734-48AF-93E8-EF369F9FAC4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95C183F3-C9A4-4FA7-A122-1216AD92BDC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95C183F3-C9A4-4FA7-A122-1216AD92BDC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95C183F3-C9A4-4FA7-A122-1216AD92BDC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95C183F3-C9A4-4FA7-A122-1216AD92BDC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F030658C-CEB0-47C1-95C5-E6BFC183D338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F030658C-CEB0-47C1-95C5-E6BFC183D338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F030658C-CEB0-47C1-95C5-E6BFC183D338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F030658C-CEB0-47C1-95C5-E6BFC183D338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F76B06F-B382-4ECD-9F87-B4F9180CB25C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F76B06F-B382-4ECD-9F87-B4F9180CB25C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F76B06F-B382-4ECD-9F87-B4F9180CB25C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F76B06F-B382-4ECD-9F87-B4F9180CB25C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F030658C-CEB0-47C1-95C5-E6BFC183D338} = {83545C4A-3E03-4336-8AE3-B06E8836DE35}
+		{8F76B06F-B382-4ECD-9F87-B4F9180CB25C} = {83545C4A-3E03-4336-8AE3-B06E8836DE35}
 	EndGlobalSection
 EndGlobal

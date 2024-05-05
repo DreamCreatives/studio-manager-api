@@ -1,12 +1,36 @@
 ﻿services:
+  studiomanager.database:
+    image: postgres:latest
+    container_name: studiomanager.database
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: P@ssw0rd
+      POSTGRES_DB: StudioManager
+    healthcheck:
+      test: 'pg_isready -U postgres --dbname=StudioManager'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./.containers/studiomanager-db:/var/lib/postgresql/data
+    restart: unless-stopped
+  
   studiomanager.api:
-    image: studiomanager.api
+    image: ${DOCKER_REGISTRY-}studiomanager.api
+    container_name: studiomanager.api
+    depends_on:
+      studiomanager.database:
+        condition: service_healthy
+    links:
+      - studiomanager.database
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: StudioManager.API/Dockerfile
     ports:
-        - 5000:80
-        - 5001:8080
+        - 5000:5000
+        - 5001:5001
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    restart: always
+      - ASPNETCORE_URLS=http://+:5001
+    restart: unless-stopped
