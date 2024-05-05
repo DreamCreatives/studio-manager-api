@@ -8,14 +8,15 @@ using StudioManager.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
+const string policyName = "DefaultPolicy";
 builder.Services.AddCors(opt =>
 {
-    opt.AddDefaultPolicy(pol =>
+    opt.AddPolicy(name: policyName, pol =>
     {
-        pol.WithOrigins("*");
-        pol.AllowAnyHeader();
-        pol.AllowAnyMethod();
-        pol.AllowAnyOrigin();
+        pol.WithOrigins("http://127.0.0.1:4200")
+            .SetIsOriginAllowedToAllowWildcardSubdomains();
+        pol.WithOrigins("http://127.0.0.1:3000")
+            .SetIsOriginAllowedToAllowWildcardSubdomains();
     });
 });
 
@@ -38,12 +39,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseCors(opt =>
-{
-    opt.AllowAnyOrigin();
-    opt.AllowAnyMethod();
-    opt.AllowAnyHeader();
-});
+app.UseCors(policyName);
 
 app.UseExceptionHandler();
 
