@@ -36,6 +36,14 @@ app.UseSwaggerUI(options =>
             $"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant()); 
     } 
 });
+
+app.UseCors(opt =>
+{
+    opt.AllowAnyOrigin();
+    opt.AllowAnyMethod();
+    opt.AllowAnyHeader();
+});
+
 app.UseHttpsRedirection();
 
 app.MapControllers();

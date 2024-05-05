@@ -16,5 +16,15 @@ public static class DependencyInjection
         
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestLoggingBehavior<,>));
+
+        services.AddCors(opt =>
+        {
+            opt.AddDefaultPolicy(pol =>
+            {
+                pol.AllowAnyHeader();
+                pol.AllowAnyMethod();
+                pol.AllowAnyOrigin();
+            });
+        });
     }
 }
