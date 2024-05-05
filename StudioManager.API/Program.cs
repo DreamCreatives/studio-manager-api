@@ -8,17 +8,6 @@ using StudioManager.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string policyName = "DefaultPolicy";
-builder.Services.AddCors(opt =>
-{
-    opt.AddPolicy(name: policyName, pol =>
-    {
-        pol.WithOrigins("http://127.0.0.1:4200")
-            .SetIsOriginAllowedToAllowWildcardSubdomains();
-        pol.WithOrigins("http://127.0.0.1:3000")
-            .SetIsOriginAllowedToAllowWildcardSubdomains();
-    });
-});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -33,15 +22,29 @@ builder.Services.RegisterApi();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
 var app = builder.Build();
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseCors(policyName);
+app.UseCors();
 
-app.UseExceptionHandler();
+app.UseAuthorization();
+app.UseAuthentication();
+
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
