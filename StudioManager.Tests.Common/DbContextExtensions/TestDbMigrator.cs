@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Testcontainers.PostgreSql;
 
 namespace StudioManager.Tests.Common.DbContextExtensions;
 
+[ExcludeFromCodeCoverage]
 public class TestDbMigrator<TContext>
     where TContext : DbContext
 {

@@ -18,8 +18,8 @@ public sealed class UpdateEquipmentTypeCommandHandler(
         try
         {
             await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-            
-            var filter = EquipmentTypeFilter.Unique(request.Id, request.EquipmentType.Name);
+
+            var filter = CreateUniqueFilter();
             var exists = await dbContext.EquipmentTypeExistsAsync(filter, cancellationToken);
             
             if (exists)
@@ -41,9 +41,10 @@ public sealed class UpdateEquipmentTypeCommandHandler(
         }
         catch (DbUpdateException e)
         {
-            return CommandResult.UnexpectedError(e.Message);
+            return CommandResult.UnexpectedError(e);
         }
         
         EquipmentTypeFilter CreateFilter() => new() { Id = request.Id };
+        EquipmentTypeFilter CreateUniqueFilter() => new() { Id = request.Id, ExactName = request.EquipmentType.Name};
     }
 }

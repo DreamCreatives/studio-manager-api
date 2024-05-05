@@ -1,5 +1,4 @@
-﻿using System.Net;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using StudioManager.Application.EquipmentTypes.Delete;
 using StudioManager.Application.Tests.EquipmentTypes.Common;
@@ -45,7 +44,7 @@ public sealed class Handle : IntegrationTestBase
         result.Should().BeOfType<CommandResult>();
         result.Data.Should().BeNull();
         result.Succeeded.Should().BeFalse();
-        result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        result.StatusCode.Should().Be(NotFoundStatusCode);
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be($"[NOT FOUND] {nameof(EquipmentType)} with id '{id}' does not exist");
     }
@@ -69,7 +68,7 @@ public sealed class Handle : IntegrationTestBase
         result.Should().BeOfType<CommandResult>();
         result.Data.Should().BeNull();
         result.Succeeded.Should().BeTrue();
-        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        result.StatusCode.Should().Be(OkStatusCode);
         result.Error.Should().BeNullOrWhiteSpace();
         
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))

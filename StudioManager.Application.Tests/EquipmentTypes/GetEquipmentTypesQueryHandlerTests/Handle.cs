@@ -54,6 +54,7 @@ public sealed class Handle : IntegrationTestBase
         // Arrange
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync())
         {
+            await EquipmentTypeTestContextHelper.ClearEquipmentTypesAsync(dbContext);
             var equipmentTypes = Enumerable.Range(0, 5).Select(x => EquipmentType.Create(x.ToString())).ToArray();
             await EquipmentTypeTestContextHelper.AddEquipmentTypeAsync(dbContext, equipmentTypes);
         }
@@ -71,6 +72,33 @@ public sealed class Handle : IntegrationTestBase
         result.Data.Should().NotBeNull();
         result.Data.Should().NotBeEmpty();
         result.Data!.Count.Should().Be(5);
+        result.Data.Should().BeOfType<List<EquipmentTypeReadDto>>();
+    }
+    
+    [Test]
+    public async Task should_return_mapped_and_filtered_data_async()
+    {
+        // Arrange
+        await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync())
+        {
+            await EquipmentTypeTestContextHelper.ClearEquipmentTypesAsync(dbContext);
+            var equipmentTypes = Enumerable.Range(0, 5).Select(x => EquipmentType.Create(x.ToString())).ToArray();
+            await EquipmentTypeTestContextHelper.AddEquipmentTypeAsync(dbContext, equipmentTypes);
+        }
+        
+        var query = new GetEquipmentTypesQuery { Filter = new EquipmentTypeFilter { Name = "1" } };
+        
+        // Act
+        var result = await _testCandidate.Handle(query, Cts.Token);
+        
+        // Assert
+        result.Should().NotBeNull();
+        result.Error.Should().BeNullOrWhiteSpace();
+        result.StatusCode.Should().Be(OkStatusCode);
+        result.Succeeded.Should().BeTrue();
+        result.Data.Should().NotBeNull();
+        result.Data.Should().NotBeEmpty();
+        result.Data!.Count.Should().Be(1);
         result.Data.Should().BeOfType<List<EquipmentTypeReadDto>>();
     }
 }

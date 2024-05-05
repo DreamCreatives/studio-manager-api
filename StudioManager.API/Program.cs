@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using StudioManager.API;
@@ -47,3 +48,6 @@ await using (var scope = app.Services.CreateAsyncScope())
 }
 
 await app.RunAsync();
+
+[ExcludeFromCodeCoverage]
+public partial class Program;

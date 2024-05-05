@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using FluentValidation;
 using MediatR;
 
 namespace StudioManager.API.Behaviours;
@@ -24,7 +25,7 @@ public class RequestLoggingBehavior<TRequest, TResponse>(
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception e) when (e is not ValidationException)
         {
             logger.LogError(e, "[ERROR]: {@RequestName}",
                 typeof(TRequest).Name);

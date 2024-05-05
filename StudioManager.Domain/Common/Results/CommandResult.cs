@@ -56,4 +56,13 @@ public sealed class CommandResult : IRequestResult<object?>
             StatusCode = HttpStatusCode.InternalServerError
         };
     }
+    
+    public static CommandResult UnexpectedError(Exception error)
+    {
+        var message = error.InnerException is not null
+            ? $"[EX]: {error.InnerException.Message} {Environment.NewLine} [INNER]: {error.InnerException.Message}"
+            : error.Message;
+        
+        return UnexpectedError(message);
+    }
 }

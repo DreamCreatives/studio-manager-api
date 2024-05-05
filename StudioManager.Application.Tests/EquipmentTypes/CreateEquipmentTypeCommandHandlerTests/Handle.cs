@@ -1,5 +1,4 @@
-﻿using System.Net;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Application.EquipmentTypes.Create;
@@ -45,7 +44,7 @@ public sealed class Handle : IntegrationTestBase
         result.Should().BeOfType<CommandResult>();
         result.Data.Should().BeNull();
         result.Succeeded.Should().BeFalse();
-        result.StatusCode.Should().Be(HttpStatusCode.Conflict);
+        result.StatusCode.Should().Be(ConflictStatusCode);
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be(DB.EQUIPMENT_TYPE_DUPLICATE_NAME);
     }
@@ -72,7 +71,7 @@ public sealed class Handle : IntegrationTestBase
         var parseResult = Guid.TryParse(result.Data!.ToString(), out var id);
         parseResult.Should().BeTrue();
         result.Succeeded.Should().BeTrue();
-        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        result.StatusCode.Should().Be(OkStatusCode);
         result.Error.Should().BeNullOrWhiteSpace();
         
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))

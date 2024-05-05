@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace StudioManager.Tests.Common.DbContextExtensions;
 
+[ExcludeFromCodeCoverage]
 public class TestDbContextFactory<TContext>(string? connectionString) : IDbContextFactory<TContext>
     where TContext : DbContext
 {

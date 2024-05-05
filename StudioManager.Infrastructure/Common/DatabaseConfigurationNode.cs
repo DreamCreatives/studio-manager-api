@@ -1,5 +1,8 @@
-﻿namespace StudioManager.Infrastructure.Common;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace StudioManager.Infrastructure.Common;
+
+[ExcludeFromCodeCoverage]
 public sealed class DatabaseConfigurationNode(
     string password, string userName, string connectionDetails)
 {

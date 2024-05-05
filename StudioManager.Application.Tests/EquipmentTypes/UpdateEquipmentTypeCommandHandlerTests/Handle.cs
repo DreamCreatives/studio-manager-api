@@ -1,5 +1,4 @@
-﻿using System.Net;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Application.EquipmentTypes.Update;
@@ -36,7 +35,7 @@ public sealed class Handle : IntegrationTestBase
             await EquipmentTypeTestContextHelper.AddEquipmentTypeAsync(dbContext, equipmentType);
         }
 
-        var command = new UpdateEquipmentTypeCommand(Guid.NewGuid(), new EquipmentTypeWriteDto(equipmentType.Name));
+        var command = new UpdateEquipmentTypeCommand(equipmentType.Id, new EquipmentTypeWriteDto(equipmentType.Name));
         
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
@@ -45,7 +44,7 @@ public sealed class Handle : IntegrationTestBase
         result.Should().BeOfType<CommandResult>();
         result.Data.Should().BeNull();
         result.Succeeded.Should().BeFalse();
-        result.StatusCode.Should().Be(HttpStatusCode.Conflict);
+        result.StatusCode.Should().Be(ConflictStatusCode);
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be(DB.EQUIPMENT_TYPE_DUPLICATE_NAME);
     }
@@ -69,7 +68,7 @@ public sealed class Handle : IntegrationTestBase
         result.Should().BeOfType<CommandResult>();
         result.Data.Should().BeNull();
         result.Succeeded.Should().BeFalse();
-        result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        result.StatusCode.Should().Be(NotFoundStatusCode);
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be($"[NOT FOUND] {equipmentType.GetType().Name} with id '{equipmentType.Id}' does not exist");
     }
@@ -93,7 +92,7 @@ public sealed class Handle : IntegrationTestBase
         result.Should().BeOfType<CommandResult>();
         result.Data.Should().BeNull();
         result.Succeeded.Should().BeTrue();
-        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        result.StatusCode.Should().Be(OkStatusCode);
         result.Error.Should().BeNullOrWhiteSpace();
         
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
