@@ -4,30 +4,17 @@ namespace StudioManager.API.Contracts.Pagination;
 
 public sealed class PaginationDto
 {
-    private int? _limit;
-    private int? _page;
-    
-    [Range(0, int.MaxValue)]
-    public int? Limit
-    {
-        get => _limit;
-        set => _limit = value ?? 10;
-    }
-    
-    [Range(0, int.MaxValue)]
-    public int? Page
-    {
-        get => _page;
-        set => _page = value ?? 10;
-    }
+    [Range(0, int.MaxValue)] public int Limit { get; private init; } = 25;
+
+    [Range(0, int.MaxValue)] public int Page { get; private init; } = 1;
 
     public int GetOffset()
     {
-        if (!Page.HasValue)
-        {
-            return 0;
-        }
-        
-        return Limit!.Value * (Page.Value - 1);
+        return Limit * (Page - 1);
+    }
+
+    public static PaginationDto Default()
+    {
+        return new PaginationDto { Limit = 25, Page = 1 };
     }
 }

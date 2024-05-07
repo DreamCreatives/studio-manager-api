@@ -4,10 +4,12 @@ namespace StudioManager.Domain.Common.Results;
 
 public sealed class CommandResult : IRequestResult<object?>
 {
-    public bool Succeeded { get; set; }
-    public HttpStatusCode StatusCode { get; set; }
-    public object? Data { get; set; }
-    public string? Error { get; init; }
+    private CommandResult() { }
+    
+    public bool Succeeded { get; private init; }
+    public HttpStatusCode StatusCode { get; private init; }
+    public object? Data { get; private init; }
+    public string? Error { get; private init; }
     
     public static CommandResult Success(object? data = null)
     {

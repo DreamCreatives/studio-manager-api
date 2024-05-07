@@ -29,14 +29,11 @@ public sealed class Equipment : EntityBase
         };
     }
     
-    public static Equipment Update(string name, Guid equipmentTypeId, int quantity)
+    public void Update(string name, Guid equipmentTypeId, int quantity)
     {
-        return new Equipment
-        {
-            Id = Guid.NewGuid(),
-            Name = name,
-            EquipmentTypeId = equipmentTypeId,
-            Quantity = quantity,
-        };
+        Name = name;
+        EquipmentTypeId = equipmentTypeId;
+        Quantity = quantity;
+        InitialQuantity = quantity;
     }
 }

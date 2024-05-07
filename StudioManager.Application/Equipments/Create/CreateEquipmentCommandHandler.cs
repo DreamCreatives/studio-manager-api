@@ -17,15 +17,18 @@ public sealed class CreateEquipmentCommandHandler(
         {
             await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-            var checkResult = await EquipmentCommonLogic.
-                CheckEntityReferencesAsync(dbContext, request.Equipment, cancellationToken);
+            var checkResult = await EquipmentChecker.
+                CheckEquipmentReferencesAsync(dbContext, null, request.Equipment, cancellationToken);
             
             if (!checkResult.Succeeded)
             {
                 return checkResult.CommandResult;
             }
             
-            var equipment = Equipment.Create(request.Equipment.Name, checkResult.Data, request.Equipment.Quantity);
+            var equipment = Equipment.Create(
+                request.Equipment.Name,
+                request.Equipment.EquipmentTypeId,
+                request.Equipment.Quantity);
 
             await dbContext.Equipments.AddAsync(equipment, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
