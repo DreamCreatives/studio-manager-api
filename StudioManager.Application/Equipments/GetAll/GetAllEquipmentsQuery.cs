@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using StudioManager.API.Contracts.Equipment;
+using StudioManager.API.Contracts.Equipments;
 using StudioManager.API.Contracts.Pagination;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Filters;

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using StudioManager.API.Contracts.Equipment;
+using StudioManager.API.Contracts.Equipments;
 using StudioManager.Domain.Common.Results;
 
 namespace StudioManager.Application.Equipments.Create;

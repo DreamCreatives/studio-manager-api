@@ -6,7 +6,7 @@ public sealed class EquipmentType : EntityBase
     
     #region EntityRelations
     
-    public IQueryable<Equipment> Equipments { get; set; } = default!;
+    public ICollection<Equipment> Equipments { get; set; } = new List<Equipment>();
 
     #endregion
     

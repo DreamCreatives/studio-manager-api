@@ -1,5 +1,8 @@
-﻿namespace StudioManager.Domain.Common.Results;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace StudioManager.Domain.Common.Results;
+
+[ExcludeFromCodeCoverage]
 public sealed class CheckResult<T>
 {
     private CheckResult() { }

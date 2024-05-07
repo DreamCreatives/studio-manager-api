@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 namespace StudioManager.Domain.Common.Results;
 
+[ExcludeFromCodeCoverage]
 public class QueryResult<T> : IRequestResult<T>
 {
     public bool Succeeded { get; private init; }

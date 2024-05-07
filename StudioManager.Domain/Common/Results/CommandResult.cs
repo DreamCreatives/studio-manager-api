@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 namespace StudioManager.Domain.Common.Results;
 
+[ExcludeFromCodeCoverage]
 public sealed class CommandResult : IRequestResult<object?>
 {
     private CommandResult() { }

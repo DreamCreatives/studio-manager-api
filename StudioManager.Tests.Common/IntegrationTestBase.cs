@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using System.Net;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using StudioManager.Tests.Common.DbContextExtensions;
 
 namespace StudioManager.Tests.Common;
 
+[ExcludeFromCodeCoverage]
 public abstract class IntegrationTestBase
 {
     protected static readonly CancellationTokenSource Cts = new();
@@ -44,11 +46,11 @@ public abstract class IntegrationTestBase
     {
         if (filter is not null)
         {
-            await db.Set<T>().Where(filter).ExecuteDeleteAsync();
+            await db.Set<T>().Where(filter).ExecuteDeleteAsync(Cts.Token);
         }
         else
         {
-            await db.Set<T>().ExecuteDeleteAsync();
+            await db.Set<T>().ExecuteDeleteAsync(Cts.Token);
         }
 
         await db.SaveChangesAsync();
@@ -59,7 +61,7 @@ public abstract class IntegrationTestBase
         params T[] entities)
         where T : class
     {
-        await db.Set<T>().AddRangeAsync(entities);
-        await db.SaveChangesAsync();
+        await db.Set<T>().AddRangeAsync(entities, Cts.Token);
+        await db.SaveChangesAsync(Cts.Token);
     }
 }

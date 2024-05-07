@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using StudioManager.API.Contracts.Equipment;
+using StudioManager.API.Contracts.Equipments;
 using StudioManager.Application.Equipments.Create;
 using StudioManager.Application.Equipments.Validators;
 

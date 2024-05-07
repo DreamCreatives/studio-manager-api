@@ -1,4 +1,6 @@
-﻿namespace StudioManager.Domain.Entities;
+﻿using StudioManager.Domain.ErrorMessages;
+
+namespace StudioManager.Domain.Entities;
 
 public sealed class Equipment : EntityBase
 {
@@ -14,6 +16,15 @@ public sealed class Equipment : EntityBase
     public EquipmentType EquipmentType { get; set; } = default!;
 
     #endregion
+    
+    public void Reserve(int quantity)
+    {
+        Quantity -= quantity;
+        if (Quantity < 0)
+        {
+            throw new InvalidOperationException(EX.EQUIPMENT_NEGATIVE_QUANTITY);
+        }
+    }
     
     public static Equipment Create(string name, Guid equipmentTypeId, int quantity)
     {

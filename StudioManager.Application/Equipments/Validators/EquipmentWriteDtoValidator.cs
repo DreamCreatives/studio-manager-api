@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using StudioManager.API.Contracts.Equipment;
+using StudioManager.API.Contracts.Equipments;
 
 namespace StudioManager.Application.Equipments.Validators;
 

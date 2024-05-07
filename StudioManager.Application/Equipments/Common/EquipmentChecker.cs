@@ -1,4 +1,4 @@
-﻿using StudioManager.API.Contracts.Equipment;
+﻿using StudioManager.API.Contracts.Equipments;
 using StudioManager.Application.DbContextExtensions;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;

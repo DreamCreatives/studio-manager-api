@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using StudioManager.API.Contracts.Equipment;
+using StudioManager.API.Contracts.Equipments;
 using StudioManager.Domain.Entities;
 
 namespace StudioManager.Application.Equipments.MapperProjections;

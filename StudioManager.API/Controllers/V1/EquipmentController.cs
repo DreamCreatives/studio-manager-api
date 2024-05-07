@@ -3,7 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StudioManager.API.Base;
-using StudioManager.API.Contracts.Equipment;
+using StudioManager.API.Contracts.Equipments;
 using StudioManager.API.Contracts.Pagination;
 using StudioManager.Application.Equipments.Create;
 using StudioManager.Application.Equipments.Delete;
