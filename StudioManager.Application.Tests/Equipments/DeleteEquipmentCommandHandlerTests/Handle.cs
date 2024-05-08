@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using StudioManager.API.Contracts.EquipmentTypes;
-using StudioManager.Application.EquipmentTypes.Update;
+using StudioManager.Application.Equipments.Delete;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Domain.ErrorMessages;
@@ -9,43 +8,20 @@ using StudioManager.Infrastructure;
 using StudioManager.Tests.Common;
 using StudioManager.Tests.Common.DbContextExtensions;
 
-namespace StudioManager.Application.Tests.EquipmentTypes.UpdateEquipmentTypeCommandHandlerTests;
+namespace StudioManager.Application.Tests.Equipments.DeleteEquipmentCommandHandlerTests;
 
 public sealed class Handle : IntegrationTestBase
 {
-    private static UpdateEquipmentTypeCommandHandler _testCandidate = null!;
+    private static DeleteEquipmentCommandHandler _testCandidate = null!;
     private static TestDbContextFactory<StudioManagerDbContext> _testDbContextFactory = null!;
-
+    
+    
     [SetUp]
     public async Task SetUpAsync()
     {
         var connectionString = await DbMigrator.MigrateDbAsync();
         _testDbContextFactory = new TestDbContextFactory<StudioManagerDbContext>(connectionString);
-        _testCandidate = new UpdateEquipmentTypeCommandHandler(_testDbContextFactory);
-    }
-    
-    [Test]
-    public async Task should_return_conflict_when_the_name_is_duplicated_async()
-    {
-        // Arrange
-        var equipmentType = EquipmentType.Create("Test-Equipment-Type");
-        await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
-        {
-            await AddEntitiesToTable(dbContext, equipmentType);
-        }
-
-        var command = new UpdateEquipmentTypeCommand(Guid.NewGuid(), new EquipmentTypeWriteDto(equipmentType.Name));
-        
-        // Act
-        var result = await _testCandidate.Handle(command, Cts.Token);
-
-        result.Should().NotBeNull();
-        result.Should().BeOfType<CommandResult>();
-        result.Data.Should().BeNull();
-        result.Succeeded.Should().BeFalse();
-        result.StatusCode.Should().Be(ConflictStatusCode);
-        result.Error.Should().NotBeNullOrWhiteSpace();
-        result.Error.Should().Be(DB.EQUIPMENT_TYPE_DUPLICATE_NAME);
+        _testCandidate = new DeleteEquipmentCommandHandler(_testDbContextFactory);
     }
     
     [Test]
@@ -54,11 +30,12 @@ public sealed class Handle : IntegrationTestBase
         // Arrange
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
-            await ClearTableContentsForAsync<EquipmentType>(dbContext);
+            await ClearTableContentsForAsync<Equipment>(dbContext);
         }
+
+        var id = Guid.NewGuid();
         
-        var equipmentType = EquipmentType.Create("Test-Equipment-Type");
-        var command = new UpdateEquipmentTypeCommand(equipmentType.Id, new EquipmentTypeWriteDto(equipmentType.Name));
+        var command = new DeleteEquipmentCommand(id);
         
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
@@ -69,7 +46,40 @@ public sealed class Handle : IntegrationTestBase
         result.Succeeded.Should().BeFalse();
         result.StatusCode.Should().Be(NotFoundStatusCode);
         result.Error.Should().NotBeNullOrWhiteSpace();
-        result.Error.Should().Be($"[NOT FOUND] {equipmentType.GetType().Name} with id '{equipmentType.Id}' does not exist");
+        result.Error.Should().Be($"[NOT FOUND] {nameof(Equipment)} with id '{id}' does not exist");
+    }
+    
+    [Test]
+    public async Task should_return_error_when_initial_count_is_invalid_async()
+    {
+        // Arrange
+        var equipmentType = EquipmentType.Create("Test-Equipment-Type");
+        var equipment = Equipment.Create("Test-Equipment", equipmentType.Id, 10);
+        await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
+        {
+            await ClearTableContentsForAsync<EquipmentType>(dbContext);
+            await ClearTableContentsForAsync<Equipment>(dbContext);
+            await AddEntitiesToTable(dbContext, equipmentType);
+            await AddEntitiesToTable(dbContext, equipment);
+            equipment.Reserve(1);
+            dbContext.Equipments.Update(equipment);
+            await dbContext.SaveChangesAsync(Cts.Token);
+        }
+
+        var command = new DeleteEquipmentCommand(equipment.Id);
+        
+        // Act
+        var result = await _testCandidate.Handle(command, Cts.Token);
+
+        result.Should().NotBeNull();
+        result.Should().BeOfType<CommandResult>();
+        result.Data.Should().BeNull();
+        result.Succeeded.Should().BeFalse();
+        result.StatusCode.Should().Be(ConflictStatusCode);
+        result.Error.Should().NotBeNullOrWhiteSpace();
+        result.Error.Should().Be(string.Format(DB_FORMAT.EQUIPMENT_QUANTITY_MISSING_WHEN_REMOVING,
+            equipment.InitialQuantity,
+            equipment.Quantity));
     }
     
     [Test]
@@ -77,12 +87,16 @@ public sealed class Handle : IntegrationTestBase
     {
         // Arrange
         var equipmentType = EquipmentType.Create("Test-Equipment-Type");
+        var equipment = Equipment.Create("Test-Equipment", equipmentType.Id, 1);
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
+            await ClearTableContentsForAsync<EquipmentType>(dbContext);
+            await ClearTableContentsForAsync<Equipment>(dbContext);
             await AddEntitiesToTable(dbContext, equipmentType);
+            await AddEntitiesToTable(dbContext, equipment);
         }
-        equipmentType.Update("Updated-Equipment-Type");
-        var command = new UpdateEquipmentTypeCommand(equipmentType.Id, new EquipmentTypeWriteDto(equipmentType.Name));
+
+        var command = new DeleteEquipmentCommand(equipment.Id);
         
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
@@ -96,9 +110,8 @@ public sealed class Handle : IntegrationTestBase
         
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
-            var databaseCheck = await dbContext.EquipmentTypes.FindAsync(equipmentType.Id);
-            databaseCheck.Should().NotBeNull();
-            databaseCheck!.Name.Should().Be(equipmentType.Name);
+            var databaseCheck = await dbContext.Equipments.FindAsync(equipment.Id);
+            databaseCheck.Should().BeNull();
         }
     }
 }

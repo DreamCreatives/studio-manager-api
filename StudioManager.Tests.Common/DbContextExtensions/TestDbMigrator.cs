@@ -12,7 +12,7 @@ public class TestDbMigrator<TContext>
 
     public async Task StartDbAsync()
     {
-        _postgresContainer = new PostgreSqlBuilder().WithDatabase("testdb").Build();
+        _postgresContainer = new PostgreSqlBuilder().WithDatabase($"StudioManager_Test_{Guid.NewGuid()}").Build();
         await _postgresContainer.StartAsync();
         _postgresContainer.GetConnectionString();
     }
