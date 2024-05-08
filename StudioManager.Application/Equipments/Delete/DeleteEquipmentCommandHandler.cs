@@ -18,7 +18,7 @@ public sealed class DeleteEquipmentCommandHandler(
         try
         {
             await using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-            var filter = GetFilter();
+            var filter = new EquipmentFilter { Id = request.Id };
             var equipment = await context.GetEquipmentAsync(filter, cancellationToken);
 
             if (equipment is null)
@@ -42,8 +42,6 @@ public sealed class DeleteEquipmentCommandHandler(
         {
             return CommandResult.UnexpectedError(ex.Message);
         }
-
-        EquipmentFilter GetFilter() => new() { Id = request.Id };
 
         bool HasInitialQuantity(Equipment eq) => eq.InitialQuantity == eq.Quantity;
     }
