@@ -14,36 +14,29 @@ public sealed class UpdateEquipmentCommandHandler(
 {
     public async Task<CommandResult> Handle(UpdateEquipmentCommand request, CancellationToken cancellationToken)
     {
-        try
+        await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+        var checkResult = await EquipmentChecker.CheckEquipmentReferencesAsync(
+            dbContext,
+            request.Id,
+            request.Equipment,
+            cancellationToken);
+
+        if (!checkResult.Succeeded)
         {
-            await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-
-            var checkResult = await EquipmentChecker.CheckEquipmentReferencesAsync(
-                dbContext,
-                request.Id,
-                request.Equipment,
-                cancellationToken);
-
-            if (!checkResult.Succeeded)
-            {
-                return checkResult.CommandResult;
-            }
-            
-            var equipment = await dbContext.GetEquipmentAsync(request.Id, cancellationToken);
-            
-            if (equipment is null)
-            {
-                return CommandResult.NotFound<Equipment>(request.Id);
-            }
-            
-            equipment.Update(request.Equipment.Name, request.Equipment.EquipmentTypeId, request.Equipment.Quantity);
-            await dbContext.SaveChangesAsync(cancellationToken);
-
-            return CommandResult.Success();
+            return checkResult.CommandResult;
         }
-        catch (DbUpdateException e)
+            
+        var equipment = await dbContext.GetEquipmentAsync(request.Id, cancellationToken);
+            
+        if (equipment is null)
         {
-            return CommandResult.UnexpectedError(e);
+            return CommandResult.NotFound<Equipment>(request.Id);
         }
+            
+        equipment.Update(request.Equipment.Name, request.Equipment.EquipmentTypeId, request.Equipment.Quantity);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return CommandResult.Success();
     }
 }

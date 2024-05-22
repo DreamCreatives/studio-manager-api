@@ -14,11 +14,13 @@ public sealed class Equipment : EntityBase
     #region EntityRelations
     
     public EquipmentType EquipmentType { get; set; } = default!;
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
     #endregion
     
-    public void Reserve(int quantity)
+    public void Reserve(int quantity, int initialQuantity = 0)
     {
+        Quantity += initialQuantity;
         Quantity -= quantity;
         if (Quantity < 0)
         {

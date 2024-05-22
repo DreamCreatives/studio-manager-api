@@ -32,6 +32,8 @@ builder.Services.RegisterApi();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+// builder.Services.AddHostedService<FinishedReservationsBackgroundService>(); TODO: Implement redis cache for read lock
+
 var app = builder.Build();
 app.UseHttpsRedirection();
 

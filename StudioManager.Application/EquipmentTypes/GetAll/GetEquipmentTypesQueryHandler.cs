@@ -19,6 +19,7 @@ public sealed class GetEquipmentTypesQueryHandler(
     {
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         var data = await dbContext.EquipmentTypes
+            .AsNoTracking()
             .Where(request.Filter.ToQuery())
             .ProjectTo<EquipmentTypeReadDto>(mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);

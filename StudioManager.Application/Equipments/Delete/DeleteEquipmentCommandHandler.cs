@@ -15,33 +15,26 @@ public sealed class DeleteEquipmentCommandHandler(
 {
     public async Task<CommandResult> Handle(DeleteEquipmentCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            await using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-            var filter = new EquipmentFilter { Id = request.Id };
-            var equipment = await context.GetEquipmentAsync(filter, cancellationToken);
+        await using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var filter = new EquipmentFilter { Id = request.Id };
+        var equipment = await context.GetEquipmentAsync(filter, cancellationToken);
 
-            if (equipment is null)
-            {
-                return CommandResult.NotFound<Equipment>(request.Id);
-            }
+        if (equipment is null)
+        {
+            return CommandResult.NotFound<Equipment>(request.Id);
+        }
             
-            if (!HasInitialQuantity(equipment))
-            {
-                return CommandResult.Conflict(
-                    string.Format(DB_FORMAT.EQUIPMENT_QUANTITY_MISSING_WHEN_REMOVING,
-                        equipment.InitialQuantity,
-                        equipment.Quantity));
-            }
-
-            context.Equipments.Remove(equipment);
-            await context.SaveChangesAsync(cancellationToken);
-            return CommandResult.Success();
-        }
-        catch (Exception ex)
+        if (!HasInitialQuantity(equipment))
         {
-            return CommandResult.UnexpectedError(ex.Message);
+            return CommandResult.Conflict(
+                string.Format(DB_FORMAT.EQUIPMENT_QUANTITY_MISSING_WHEN_REMOVING,
+                    equipment.InitialQuantity,
+                    equipment.Quantity));
         }
+
+        context.Equipments.Remove(equipment);
+        await context.SaveChangesAsync(cancellationToken);
+        return CommandResult.Success();
 
         bool HasInitialQuantity(Equipment eq) => eq.InitialQuantity == eq.Quantity;
     }

@@ -11,6 +11,14 @@ public static class DB
     public const string EQUIPMENT_TYPE_DUPLICATE_NAME = "Equipment type with this name already exists";
     
     #endregion
+    
+    #region Reservations
+  
+    public const string RESERVATION_EQUIPMENT_NOT_FOUND = "Cannot create reservation for equipment that does not exist";
+    public const string RESERVATION_EQUIPMENT_QUANTITY_INSUFFICIENT = "Cannot create reservation, the quantity requested is greater than the available quantity";
+    public const string RESERVATION_EQUIPMENT_USED_BY_OTHERS_IN_PERIOD = "Cannot create reservation, the equipment is already reserved by others in the specified period";
+    
+    #endregion
 }
 
 public static class DB_FORMAT

@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using Testcontainers.PostgreSql;
 
 namespace StudioManager.Tests.Common.DbContextExtensions;
@@ -45,8 +47,13 @@ public class TestDbMigrator<TContext>
             {
                 npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
             }).UseSnakeCaseNamingConvention();
+        
+        var mediator = new Mock<IMediator>();
+        mediator.Setup(x => x.Publish(
+            It.IsAny<INotification>(),
+            It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-        var dbContext = (TContext)Activator.CreateInstance(typeof(TContext), dbContextOptionsBuilder.Options)!;
+        var dbContext = (TContext)Activator.CreateInstance(typeof(TContext), dbContextOptionsBuilder.Options, mediator.Object)!;
         return dbContext;
     }
 }

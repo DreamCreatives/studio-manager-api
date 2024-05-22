@@ -14,24 +14,17 @@ public sealed class DeleteEquipmentTypeCommandHandler(
 {
     public async Task<CommandResult> Handle(DeleteEquipmentTypeCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-            var filter = new EquipmentTypeFilter { Id = request.Id };
-            var existing = await dbContext.GetEquipmentTypeAsync(filter, cancellationToken);
+        await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var filter = new EquipmentTypeFilter { Id = request.Id };
+        var existing = await dbContext.GetEquipmentTypeAsync(filter, cancellationToken);
             
-            if (existing is null)
-            {
-                return CommandResult.NotFound<EquipmentType>(request.Id);
-            }
-
-            dbContext.EquipmentTypes.Remove(existing);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            return CommandResult.Success();
-        }
-        catch (DbUpdateException e)
+        if (existing is null)
         {
-            return CommandResult.UnexpectedError(e);
+            return CommandResult.NotFound<EquipmentType>(request.Id);
         }
+
+        dbContext.EquipmentTypes.Remove(existing);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return CommandResult.Success();
     }
 }

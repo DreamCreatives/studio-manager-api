@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace StudioManager.Tests.Common.DbContextExtensions;
 
@@ -30,7 +32,12 @@ public class TestDbContextFactory<TContext>(string? connectionString) : IDbConte
                 npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
             }).UseSnakeCaseNamingConvention();
 
-        var dbContext = (TDbContext)Activator.CreateInstance(typeof(TDbContext), dbContextOptionsBuilder.Options)!;
+        var mediator = new Mock<IMediator>();
+        mediator.Setup(x => x.Publish(
+            It.IsAny<INotification>(),
+            It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
+        var dbContext = (TDbContext)Activator.CreateInstance(typeof(TDbContext), dbContextOptionsBuilder.Options, mediator.Object)!;
         return dbContext;
     }
 }

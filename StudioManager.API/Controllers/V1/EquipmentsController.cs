@@ -15,9 +15,9 @@ using StudioManager.Domain.Filters;
 namespace StudioManager.API.Controllers.V1;
 
 [ApiVersion("1.0")]
-[Route("api/v{v:apiVersion}/Equipments")]
+[Route("api/v{v:apiVersion}/[controller]")]
 [ExcludeFromCodeCoverage]
-public class EquipmentController(ISender sender) : CoreController(sender)
+public class EquipmentsController(ISender sender) : CoreController(sender)
 {
     [HttpPost]
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using StudioManager.Domain.Entities;
@@ -9,10 +10,12 @@ namespace StudioManager.Infrastructure.Common;
 
 [ExcludeFromCodeCoverage]
 public abstract class DbContextBase(
-    DbContextOptions options) : DbContext(options)
+    DbContextOptions options,
+    IMediator mediator) : DbContext(options)
 {
     public DbSet<EquipmentType> EquipmentTypes { get; set; }
     public DbSet<Equipment> Equipments { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
     
     private bool HasOpenTransaction => _transaction is not null;
     private IDbContextTransaction? _transaction;
@@ -41,5 +44,11 @@ public abstract class DbContextBase(
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        await mediator.DispatchDomainEventsAsync(this);
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }
