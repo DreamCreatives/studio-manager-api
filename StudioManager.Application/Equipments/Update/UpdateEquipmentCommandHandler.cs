@@ -22,18 +22,12 @@ public sealed class UpdateEquipmentCommandHandler(
             request.Equipment,
             cancellationToken);
 
-        if (!checkResult.Succeeded)
-        {
-            return checkResult.CommandResult;
-        }
-            
+        if (!checkResult.Succeeded) return checkResult.CommandResult;
+
         var equipment = await dbContext.GetEquipmentAsync(request.Id, cancellationToken);
-            
-        if (equipment is null)
-        {
-            return CommandResult.NotFound<Equipment>(request.Id);
-        }
-            
+
+        if (equipment is null) return CommandResult.NotFound<Equipment>(request.Id);
+
         equipment.Update(request.Equipment.Name, request.Equipment.EquipmentTypeId, request.Equipment.Quantity);
         await dbContext.SaveChangesAsync(cancellationToken);
 

@@ -4,4 +4,4 @@ using StudioManager.Domain.Common.Results;
 
 namespace StudioManager.Application.Reservations.Create;
 
-public sealed record CreateReservationCommand(ReservationWriteDto Reservation ) : IRequest<CommandResult>;
+public sealed record CreateReservationCommand(ReservationWriteDto Reservation) : IRequest<CommandResult>;

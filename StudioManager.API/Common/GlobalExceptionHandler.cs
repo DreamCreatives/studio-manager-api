@@ -15,11 +15,10 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         CancellationToken cancellationToken)
     {
         if (exception is ValidationException validationException)
-        {
             return await HandleValidationExceptionAsync(httpContext, validationException, cancellationToken);
-        }
-        
-        logger.LogError(exception, "[ERROR]: Error occurred while handling request {@Request}",exception.TargetSite?.DeclaringType?.FullName);
+
+        logger.LogError(exception, "[ERROR]: Error occurred while handling request {@Request}",
+            exception.TargetSite?.DeclaringType?.FullName);
 
         var problemDetails = new ProblemDetails
         {
@@ -34,8 +33,9 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
         return true;
     }
-    
-    private static async Task<bool> HandleValidationExceptionAsync(HttpContext httpContext, ValidationException exception, CancellationToken cancellationToken)
+
+    private static async Task<bool> HandleValidationExceptionAsync(HttpContext httpContext,
+        ValidationException exception, CancellationToken cancellationToken)
     {
         var problemDetails = new ValidationProblemDetails(GroupValidationErrors(exception.Errors))
         {
@@ -56,16 +56,10 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         var final = new Dictionary<string, string[]>();
 
         foreach (var error in validationErrors)
-        {
             if (final.TryGetValue(error.PropertyName, out var value))
-            {
                 final[error.PropertyName] = value.Append(error.ErrorMessage).ToArray();
-            }
             else
-            {
                 final[error.PropertyName] = [error.ErrorMessage];
-            }
-        }
 
         return final;
     }

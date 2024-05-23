@@ -17,14 +17,14 @@ public sealed class EquipmentReturnedEventHandler(
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
         var equipment = await dbContext.GetEquipmentAsync(notification.Id, cancellationToken);
-        
+
         if (equipment is null)
         {
             logger.LogWarning("Equipment with Id '{EquipmentId}' was not found when handling {Notification}",
                 notification.Id, nameof(EquipmentReturnedEvent));
             return;
         }
-        
+
         equipment.Reserve(0, notification.Quantity);
         await dbContext.SaveChangesAsync(cancellationToken);
     }

@@ -5,18 +5,16 @@ namespace StudioManager.Domain.Entities;
 
 public abstract class EntityBase
 {
+    private readonly List<INotification> _entityEvents = [];
     public Guid Id { get; protected init; }
 
-    private readonly List<INotification> _entityEvents = [];
-    
-    [NotMapped]
-    public IReadOnlyCollection<INotification> DomainEvents => _entityEvents;
-    
+    [NotMapped] public IReadOnlyCollection<INotification> DomainEvents => _entityEvents;
+
     public void AddDomainEvent(INotification domainEvent)
     {
         _entityEvents.Add(domainEvent);
     }
-    
+
     public void ClearDomainEvents()
     {
         _entityEvents.Clear();

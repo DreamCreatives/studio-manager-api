@@ -23,7 +23,7 @@ public sealed class Handle : IntegrationTestBase
         _testDbContextFactory = new TestDbContextFactory<StudioManagerDbContext>(connectionString);
         _testCandidate = new CreateEquipmentTypeCommandHandler(_testDbContextFactory);
     }
-    
+
     [Test]
     public async Task should_return_conflict_when_the_name_is_duplicated_async()
     {
@@ -35,7 +35,7 @@ public sealed class Handle : IntegrationTestBase
         }
 
         var command = new CreateEquipmentTypeCommand(new EquipmentTypeWriteDto(equipmentType.Name));
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
 
@@ -47,7 +47,7 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be(DB.EQUIPMENT_TYPE_DUPLICATE_NAME);
     }
-    
+
     [Test]
     public async Task should_return_success_async()
     {
@@ -56,11 +56,11 @@ public sealed class Handle : IntegrationTestBase
         {
             await ClearTableContentsForAsync<EquipmentType>(dbContext);
         }
-        
+
         var equipmentType = EquipmentType.Create("Test-Equipment-Type");
 
         var command = new CreateEquipmentTypeCommand(new EquipmentTypeWriteDto(equipmentType.Name));
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
 
@@ -72,7 +72,7 @@ public sealed class Handle : IntegrationTestBase
         result.Succeeded.Should().BeTrue();
         result.StatusCode.Should().Be(OkStatusCode);
         result.Error.Should().BeNullOrWhiteSpace();
-        
+
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
             var databaseCheck = await dbContext.EquipmentTypes.FindAsync(id);

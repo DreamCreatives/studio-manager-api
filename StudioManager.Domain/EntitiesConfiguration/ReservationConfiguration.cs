@@ -13,7 +13,7 @@ public sealed class ReservationConfiguration : IEntityTypeConfiguration<Reservat
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Quantity).IsRequired();
-        
+
         builder.Property(x => x.EquipmentId).IsRequired();
         builder.HasIndex(x => x.EquipmentId, "IX_Reservations_EquipmentId");
 

@@ -17,11 +17,9 @@ public sealed class DeleteReservationCommandHandler(
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         var dbReservation = await dbContext.GetReservationAsync(request.Id, cancellationToken);
 
-        if (dbReservation is null)
-        {
-            return CommandResult.NotFound<Reservation>(request.Id);
-        }
-        dbReservation.AddDomainEvent(new EquipmentReservationChangedEvent(dbReservation.EquipmentId, 0, dbReservation.Quantity));
+        if (dbReservation is null) return CommandResult.NotFound<Reservation>(request.Id);
+        dbReservation.AddDomainEvent(
+            new EquipmentReservationChangedEvent(dbReservation.EquipmentId, 0, dbReservation.Quantity));
         dbContext.Reservations.Remove(dbReservation);
         await dbContext.SaveChangesAsync(cancellationToken);
         return CommandResult.Success();

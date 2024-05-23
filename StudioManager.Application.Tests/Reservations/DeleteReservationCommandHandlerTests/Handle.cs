@@ -23,16 +23,16 @@ public sealed class Handle : IntegrationTestBase
         _dbContextFactory = new TestDbContextFactory<StudioManagerDbContext>(connectionString);
         _testCandidate = new DeleteReservationCommandHandler(_dbContextFactory);
     }
-    
+
     [Test]
     public async Task should_return_not_found_when_removing_non_existing_reservation_async()
     {
         // Arrange
         var command = new DeleteReservationCommand(Guid.NewGuid());
-        
+
         // Act
         var result = await _testCandidate.Handle(command, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeFalse();
@@ -41,19 +41,20 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be($"[NOT FOUND] {nameof(Reservation)} with id '{command.Id}' does not exist");
     }
-    
+
     [Test]
     public async Task should_return_success_async()
     {
         // Arrange
         await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
-        var reservation = await ReservationTestHelper.AddReservationForDetailsAsync(dbContext, ValidDate, ValidDate.AddDays(1), 1);
-        
+        var reservation =
+            await ReservationTestHelper.AddReservationForDetailsAsync(dbContext, ValidDate, ValidDate.AddDays(1), 1);
+
         var command = new DeleteReservationCommand(reservation.Id);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeTrue();

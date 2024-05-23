@@ -23,7 +23,7 @@ public sealed class Handle : IntegrationTestBase
         _testDbContextFactory = new TestDbContextFactory<StudioManagerDbContext>(connectionString);
         _testCandidate = new UpdateEquipmentTypeCommandHandler(_testDbContextFactory);
     }
-    
+
     [Test]
     public async Task should_return_conflict_when_the_name_is_duplicated_async()
     {
@@ -35,7 +35,7 @@ public sealed class Handle : IntegrationTestBase
         }
 
         var command = new UpdateEquipmentTypeCommand(Guid.NewGuid(), new EquipmentTypeWriteDto(equipmentType.Name));
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
 
@@ -47,7 +47,7 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be(DB.EQUIPMENT_TYPE_DUPLICATE_NAME);
     }
-    
+
     [Test]
     public async Task should_return_not_found_when_updating_non_existing_entity_async()
     {
@@ -56,10 +56,10 @@ public sealed class Handle : IntegrationTestBase
         {
             await ClearTableContentsForAsync<EquipmentType>(dbContext);
         }
-        
+
         var equipmentType = EquipmentType.Create("Test-Equipment-Type");
         var command = new UpdateEquipmentTypeCommand(equipmentType.Id, new EquipmentTypeWriteDto(equipmentType.Name));
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
 
@@ -69,9 +69,10 @@ public sealed class Handle : IntegrationTestBase
         result.Succeeded.Should().BeFalse();
         result.StatusCode.Should().Be(NotFoundStatusCode);
         result.Error.Should().NotBeNullOrWhiteSpace();
-        result.Error.Should().Be($"[NOT FOUND] {equipmentType.GetType().Name} with id '{equipmentType.Id}' does not exist");
+        result.Error.Should()
+            .Be($"[NOT FOUND] {equipmentType.GetType().Name} with id '{equipmentType.Id}' does not exist");
     }
-    
+
     [Test]
     public async Task should_return_success_async()
     {
@@ -81,9 +82,10 @@ public sealed class Handle : IntegrationTestBase
         {
             await AddEntitiesToTable(dbContext, equipmentType);
         }
+
         equipmentType.Update("Updated-Equipment-Type");
         var command = new UpdateEquipmentTypeCommand(equipmentType.Id, new EquipmentTypeWriteDto(equipmentType.Name));
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
 
@@ -93,7 +95,7 @@ public sealed class Handle : IntegrationTestBase
         result.Succeeded.Should().BeTrue();
         result.StatusCode.Should().Be(OkStatusCode);
         result.Error.Should().BeNullOrWhiteSpace();
-        
+
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
             var databaseCheck = await dbContext.EquipmentTypes.FindAsync(equipmentType.Id);

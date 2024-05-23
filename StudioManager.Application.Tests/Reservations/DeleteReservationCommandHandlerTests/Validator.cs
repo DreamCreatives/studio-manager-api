@@ -12,15 +12,16 @@ public sealed class Validator
         // Arrange
         var command = new DeleteReservationCommand(Guid.Empty);
         var validator = new DeleteReservationCommandValidator();
-        
+
         // Act
         var result = await validator.ValidateAsync(command, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.IsValid.Should().BeFalse();
         result.Errors.Should().NotBeEmpty();
         result.Errors.Should().HaveCount(1);
-        result.Errors.Should().Contain(x => x.PropertyName == nameof(DeleteReservationCommand.Id) && x.ErrorMessage == "'Id' must not be empty.");
+        result.Errors.Should().Contain(x =>
+            x.PropertyName == nameof(DeleteReservationCommand.Id) && x.ErrorMessage == "'Id' must not be empty.");
     }
 }

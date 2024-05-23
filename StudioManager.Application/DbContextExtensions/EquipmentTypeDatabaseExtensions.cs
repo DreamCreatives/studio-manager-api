@@ -16,7 +16,7 @@ public static class EquipmentTypeDatabaseExtensions
             .EquipmentTypes
             .AnyAsync(filter.ToQuery(), cancellationToken);
     }
-    
+
     public static async Task<EquipmentType?> GetEquipmentTypeAsync(
         this DbContextBase dbContext,
         EquipmentTypeFilter filter,

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Domain.Entities;
 using StudioManager.Domain.Filters;
 using StudioManager.Infrastructure.Common;
@@ -17,7 +16,7 @@ public static class ReservationDatabaseExtensions
             .Where(filter.ToQuery())
             .ToListAsync(cancellationToken);
     }
-    
+
     public static async Task<Reservation?> GetReservationAsync(
         this DbContextBase dbContext,
         Guid id,

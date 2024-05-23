@@ -17,30 +17,32 @@ public sealed class Validator
             DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1)),
             1,
             Guid.NewGuid()));
-        
+
         var validator = new UpdateReservationCommandValidator(new ReservationWriteDtoValidator());
-        
+
         // Act
         var result = await validator.ValidateAsync(command);
-        
+
         // Assert
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(x => x.PropertyName == nameof(command.Id) && x.ErrorMessage == "'Id' must not be empty.");
+        result.Errors.Should().Contain(x =>
+            x.PropertyName == nameof(command.Id) && x.ErrorMessage == "'Id' must not be empty.");
     }
-    
+
     [Test]
     public async Task should_return_error_when_command_reservation_is_invalid_async()
     {
         // Arrange
         var command = new UpdateReservationCommand(Guid.NewGuid(), null!);
-        
+
         var validator = new UpdateReservationCommandValidator(new ReservationWriteDtoValidator());
-        
+
         // Act
         var result = await validator.ValidateAsync(command);
-        
+
         // Assert
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(x => x.PropertyName == nameof(command.Reservation) && x.ErrorMessage == "'Reservation' must not be empty.");
+        result.Errors.Should().Contain(x =>
+            x.PropertyName == nameof(command.Reservation) && x.ErrorMessage == "'Reservation' must not be empty.");
     }
 }

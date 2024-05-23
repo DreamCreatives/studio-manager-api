@@ -19,14 +19,14 @@
       - ./.containers/studiomanager-db:/var/lib/postgresql/data
       - ./pg-init-scripts:/docker-entrypoint-initdb.d
     restart: unless-stopped
-
+  
   
   #### KEYCLOAK ####
   
   studiomanager.keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: studiomanager.keycloak
-    command: ["start-dev", "--import-realm"]
+    command: [ "start-dev", "--import-realm" ]
     environment:
       #KC_LOG_LEVEL: debug
       KC_DB_VENDOR: postgres
@@ -48,7 +48,7 @@
     volumes:
       - ./.containers/realm.json:/opt/keycloak/data/import/realm.json:r
     restart: unless-stopped
-        
+  
   #### API ####
   
   studiomanager.api:
@@ -66,8 +66,8 @@
       context: .
       dockerfile: StudioManager.API/Dockerfile
     ports:
-        - 5000:5000
-        - 5001:5001
+      - 5000:5000
+      - 5001:5001
     environment:
       - ASPNETCORE_URLS=http://+:5001
     restart: unless-stopped

@@ -26,7 +26,7 @@ public class EquipmentsController(ISender sender) : CoreController(sender)
         var command = new CreateEquipmentCommand(dto);
         return await SendAsync(command);
     }
-    
+
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
     public async Task<IResult> DeleteEquipment(Guid id)
@@ -34,7 +34,7 @@ public class EquipmentsController(ISender sender) : CoreController(sender)
         var command = new DeleteEquipmentCommand(id);
         return await SendAsync(command);
     }
-    
+
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
     public async Task<IResult> UpdateEquipment(Guid id, [FromBody] EquipmentWriteDto dto)
@@ -42,7 +42,7 @@ public class EquipmentsController(ISender sender) : CoreController(sender)
         var command = new UpdateEquipmentCommand(id, dto);
         return await SendAsync(command);
     }
-    
+
     [HttpGet]
     [ProducesResponseType(typeof(QueryResult<PagingResultDto<EquipmentReadDto>>), StatusCodes.Status200OK)]
     public async Task<IResult> GetEquipments(

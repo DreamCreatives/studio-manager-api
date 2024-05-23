@@ -33,15 +33,10 @@ public sealed class FinishedReservationsBackgroundService(
 
         var reservations = await dbContext.GetReservationsAsync(filter, cancellationToken);
 
-        if (reservations.Count == 0)
-        {
-            return;
-        }
-            
+        if (reservations.Count == 0) return;
+
         foreach (var reservation in reservations)
-        {
             reservation.AddDomainEvent(new EquipmentReturnedEvent(reservation.EquipmentId, 0));
-        }
 
         await dbContext.SaveChangesAsync(cancellationToken);
     }

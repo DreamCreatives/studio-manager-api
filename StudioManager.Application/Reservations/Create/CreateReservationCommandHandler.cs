@@ -16,14 +16,12 @@ public sealed class CreateReservationCommandHandler(
     {
         var reservation = request.Reservation;
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-        
-        var checkResult = await ReservationsChecker.CheckReservationAsync(dbContext, reservation, null, cancellationToken);
-        
-        if (!checkResult.Succeeded)
-        {
-            return checkResult;
-        }
-        
+
+        var checkResult =
+            await ReservationsChecker.CheckReservationAsync(dbContext, reservation, null, cancellationToken);
+
+        if (!checkResult.Succeeded) return checkResult;
+
         var dbReservation = Reservation.Create(
             reservation.StartDate,
             reservation.EndDate,
@@ -31,7 +29,7 @@ public sealed class CreateReservationCommandHandler(
             reservation.EquipmentId);
 
         await dbContext.Reservations.AddAsync(dbReservation, cancellationToken);
-        
+
         dbReservation.AddDomainEvent(new EquipmentReservedEvent(reservation.EquipmentId, reservation.Quantity));
         await dbContext.SaveChangesAsync(cancellationToken);
 

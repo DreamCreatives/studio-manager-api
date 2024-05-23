@@ -19,25 +19,26 @@ public sealed class UpdateEquipmentTypeCommandHandler(
 
         var filter = CreateUniqueFilter();
         var exists = await dbContext.EquipmentTypeExistsAsync(filter, cancellationToken);
-            
-        if (exists)
-        {
-            return CommandResult.Conflict(DB.EQUIPMENT_TYPE_DUPLICATE_NAME);
-        }
-            
+
+        if (exists) return CommandResult.Conflict(DB.EQUIPMENT_TYPE_DUPLICATE_NAME);
+
         filter = CreateFilter();
         var dbEquipmentType = await dbContext.EquipmentTypes.FirstOrDefaultAsync(filter.ToQuery(), cancellationToken);
-        if (dbEquipmentType is null)
-        {
-            return CommandResult.NotFound<EquipmentType>(request.Id);
-        }
-            
+        if (dbEquipmentType is null) return CommandResult.NotFound<EquipmentType>(request.Id);
+
         dbEquipmentType.Update(request.EquipmentType.Name);
 
         await dbContext.SaveChangesAsync(cancellationToken);
         return CommandResult.Success();
-        
-        EquipmentTypeFilter CreateFilter() => new() { Id = request.Id };
-        EquipmentTypeFilter CreateUniqueFilter() => new() { NotId = request.Id, ExactName = request.EquipmentType.Name};
+
+        EquipmentTypeFilter CreateFilter()
+        {
+            return new EquipmentTypeFilter { Id = request.Id };
+        }
+
+        EquipmentTypeFilter CreateUniqueFilter()
+        {
+            return new EquipmentTypeFilter { NotId = request.Id, ExactName = request.EquipmentType.Name };
+        }
     }
 }

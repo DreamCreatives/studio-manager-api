@@ -4,7 +4,9 @@ namespace StudioManager.Infrastructure.Common;
 
 [ExcludeFromCodeCoverage]
 public sealed class DatabaseConfigurationNode(
-    string password, string userName, string connectionDetails)
+    string password,
+    string userName,
+    string connectionDetails)
 {
     private string Password { get; } = password;
     private string Username { get; } = userName;

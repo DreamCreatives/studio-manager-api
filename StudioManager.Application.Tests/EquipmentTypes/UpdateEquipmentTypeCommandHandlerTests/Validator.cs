@@ -22,9 +22,10 @@ public sealed class Validator
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().Contain(x => x.PropertyName == "Id" && x.ErrorMessage == "'Id' must not be empty.");
-        result.Errors.Should().Contain(x => x.PropertyName == "EquipmentType.Name" && x.ErrorMessage == "'Name' must not be empty.");
+        result.Errors.Should().Contain(x =>
+            x.PropertyName == "EquipmentType.Name" && x.ErrorMessage == "'Name' must not be empty.");
     }
-    
+
     [Test]
     public async Task validator_should_return_validation_error_when_id_is_empty()
     {
@@ -40,7 +41,7 @@ public sealed class Validator
         result.IsValid.Should().BeFalse();
         result.Errors.Should().Contain(x => x.PropertyName == "Id" && x.ErrorMessage == "'Id' must not be empty.");
     }
-    
+
     [Test]
     public async Task validator_should_return_validation_error_when_name_is_empty()
     {
@@ -54,9 +55,10 @@ public sealed class Validator
 
         // Assert
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(x => x.PropertyName == "EquipmentType.Name" && x.ErrorMessage == "'Name' must not be empty.");
+        result.Errors.Should().Contain(x =>
+            x.PropertyName == "EquipmentType.Name" && x.ErrorMessage == "'Name' must not be empty.");
     }
-    
+
     [Test]
     public async Task validator_should_return_success_when_name_is_not_empty()
     {

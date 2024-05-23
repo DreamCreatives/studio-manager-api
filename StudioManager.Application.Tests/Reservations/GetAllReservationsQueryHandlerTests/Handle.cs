@@ -37,10 +37,10 @@ public sealed class Handle : IntegrationTestBase
     {
         // Arrange
         var query = new GetAllReservationsQuery(new ReservationFilter(), new PaginationDto());
-        
+
         // Act
         var result = await _testCandidate.Handle(query, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeTrue();

@@ -17,9 +17,9 @@ public static class EquipmentDatabaseExtensions
             .Where(filter.ToQuery())
             .FirstOrDefaultAsync(cancellationToken);
     }
-    
+
     public static async Task<Equipment?> GetEquipmentAsync(
-        this DbContextBase dbContext, 
+        this DbContextBase dbContext,
         Guid id,
         CancellationToken cancellationToken = default)
     {

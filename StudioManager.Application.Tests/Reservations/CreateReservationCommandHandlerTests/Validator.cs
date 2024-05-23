@@ -15,14 +15,15 @@ public sealed class Validator
         // Arrange
         var command = new CreateReservationCommand(null!);
         var validator = new CreateReservationCommandValidator(new ReservationWriteDtoValidator());
-        
+
         // Act
         var result = await validator.ValidateAsync(command);
-        
+
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().NotBeEmpty();
         result.Errors.Should().HaveCount(1);
-        result.Errors.Should().Contain(x => x.PropertyName == "Reservation" && x.ErrorMessage == "'Reservation' must not be empty.");
+        result.Errors.Should().Contain(x =>
+            x.PropertyName == "Reservation" && x.ErrorMessage == "'Reservation' must not be empty.");
     }
 }

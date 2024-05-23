@@ -25,7 +25,7 @@ public sealed class ReservationsController(ISender sender) : CoreController(send
     {
         return await SendAsync(new CreateReservationCommand(reservation));
     }
-    
+
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
     public async Task<IResult> UpdateReservation(Guid id, [FromBody] ReservationWriteDto reservation)

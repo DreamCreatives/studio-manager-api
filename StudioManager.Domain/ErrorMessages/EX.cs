@@ -1,4 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
+
 namespace StudioManager.Domain.ErrorMessages;
 
 public static class EX

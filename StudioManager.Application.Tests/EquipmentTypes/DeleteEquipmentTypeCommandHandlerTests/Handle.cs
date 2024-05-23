@@ -13,8 +13,8 @@ public sealed class Handle : IntegrationTestBase
 {
     private static DeleteEquipmentTypeCommandHandler _testCandidate = null!;
     private static TestDbContextFactory<StudioManagerDbContext> _testDbContextFactory = null!;
-    
-    
+
+
     [SetUp]
     public async Task SetUpAsync()
     {
@@ -22,7 +22,7 @@ public sealed class Handle : IntegrationTestBase
         _testDbContextFactory = new TestDbContextFactory<StudioManagerDbContext>(connectionString);
         _testCandidate = new DeleteEquipmentTypeCommandHandler(_testDbContextFactory);
     }
-    
+
     [Test]
     public async Task should_return_not_found_when_updating_non_existing_entity_async()
     {
@@ -33,9 +33,9 @@ public sealed class Handle : IntegrationTestBase
         }
 
         var id = Guid.NewGuid();
-        
+
         var command = new DeleteEquipmentTypeCommand(id);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
 
@@ -47,7 +47,7 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be($"[NOT FOUND] {nameof(EquipmentType)} with id '{id}' does not exist");
     }
-    
+
     [Test]
     public async Task should_return_success_async()
     {
@@ -59,7 +59,7 @@ public sealed class Handle : IntegrationTestBase
         }
 
         var command = new DeleteEquipmentTypeCommand(equipmentType.Id);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
 
@@ -69,7 +69,7 @@ public sealed class Handle : IntegrationTestBase
         result.Succeeded.Should().BeTrue();
         result.StatusCode.Should().Be(OkStatusCode);
         result.Error.Should().BeNullOrWhiteSpace();
-        
+
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
             var databaseCheck = await dbContext.EquipmentTypes.FindAsync(equipmentType.Id);

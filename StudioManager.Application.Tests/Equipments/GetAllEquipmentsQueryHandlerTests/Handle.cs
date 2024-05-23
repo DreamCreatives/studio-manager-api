@@ -33,10 +33,10 @@ public sealed class Handle : IntegrationTestBase
     {
         // Arrange
         var query = new GetAllEquipmentsQuery(new EquipmentFilter(), new PaginationDto());
-        
+
         // Act
         var result = await _testCandidate.Handle(query, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Error.Should().BeNullOrWhiteSpace();
@@ -47,7 +47,7 @@ public sealed class Handle : IntegrationTestBase
         result.Data!.Data.Should().BeEmpty();
         result.Data.Data.Should().BeOfType<List<EquipmentReadDto>>();
     }
-    
+
     [Test]
     public async Task should_return_mapped_data_with_pagination_async()
     {
@@ -64,11 +64,12 @@ public sealed class Handle : IntegrationTestBase
                 .ToArray();
             await AddEntitiesToTable(dbContext, equipments);
         }
+
         var query = new GetAllEquipmentsQuery(new EquipmentFilter(), new PaginationDto());
-        
+
         // Act
         var result = await _testCandidate.Handle(query, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Error.Should().BeNullOrWhiteSpace();

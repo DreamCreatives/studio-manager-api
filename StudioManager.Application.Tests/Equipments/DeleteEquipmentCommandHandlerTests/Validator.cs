@@ -20,7 +20,7 @@ public sealed class Validator
         result.IsValid.Should().BeFalse();
         result.Errors.Should().Contain(x => x.PropertyName == "Id" && x.ErrorMessage == "'Id' must not be empty.");
     }
-    
+
     [Test]
     public async Task validator_should_return_success_when_name_is_not_empty()
     {

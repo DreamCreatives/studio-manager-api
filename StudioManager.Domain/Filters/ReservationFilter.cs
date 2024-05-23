@@ -10,10 +10,10 @@ public sealed class ReservationFilter : IFilter<Reservation>
     public DateOnly? StartDate { get; init; }
     public DateOnly? EndDate { get; init; }
     public string? Search { get; init; }
-    
+
     public DateOnly? MaxStartDate { get; init; }
     public DateOnly? MinEndDate { get; init; }
-    
+
     public Expression<Func<Reservation, bool>> ToQuery()
     {
         var lowerSearch = Search?.ToLower();

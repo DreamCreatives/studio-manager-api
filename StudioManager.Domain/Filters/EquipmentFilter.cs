@@ -11,6 +11,7 @@ public sealed class EquipmentFilter : IFilter<Equipment>
     public IEnumerable<Guid> EquipmentTypeIds { get; init; } = [];
     public string? ExactName { get; init; }
     public string? Search { get; init; }
+
     public Expression<Func<Equipment, bool>> ToQuery()
     {
         var lowerSearch = Search?.ToLower();

@@ -15,7 +15,8 @@ public sealed class GetAllReservationsQueryHandler(
     IMapper mapper)
     : IRequestHandler<GetAllReservationsQuery, QueryResult<PagingResultDto<ReservationReadDto>>>
 {
-    public async Task<QueryResult<PagingResultDto<ReservationReadDto>>> Handle(GetAllReservationsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResult<PagingResultDto<ReservationReadDto>>> Handle(GetAllReservationsQuery request,
+        CancellationToken cancellationToken)
     {
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         var data = dbContext.Reservations

@@ -14,14 +14,12 @@ namespace StudioManager.Tests.Common;
 [ExcludeFromCodeCoverage]
 public abstract class IntegrationTestBase
 {
-    protected static readonly CancellationTokenSource Cts = new();
-    protected static readonly IMapper Mapper = MappingTestHelper.Mapper;
-    
-    
     protected const HttpStatusCode OkStatusCode = HttpStatusCode.OK;
     protected const HttpStatusCode ConflictStatusCode = HttpStatusCode.Conflict;
     protected const HttpStatusCode NotFoundStatusCode = HttpStatusCode.NotFound;
     protected const HttpStatusCode UnexpectedErrorStatusCode = HttpStatusCode.InternalServerError;
+    protected static readonly CancellationTokenSource Cts = new();
+    protected static readonly IMapper Mapper = MappingTestHelper.Mapper;
 
     protected TestDbMigrator<StudioManagerDbContext> DbMigrator { get; private set; } = null!;
 
@@ -31,7 +29,7 @@ public abstract class IntegrationTestBase
         DbMigrator = new TestDbMigrator<StudioManagerDbContext>();
         await DbMigrator.StartDbAsync();
     }
-    
+
     [OneTimeTearDown]
     public async Task DisposeContainersAsync()
     {
@@ -45,13 +43,9 @@ public abstract class IntegrationTestBase
         where T : class
     {
         if (filter is not null)
-        {
             await db.Set<T>().Where(filter).ExecuteDeleteAsync(Cts.Token);
-        }
         else
-        {
             await db.Set<T>().ExecuteDeleteAsync(Cts.Token);
-        }
 
         await db.SaveChangesAsync();
     }

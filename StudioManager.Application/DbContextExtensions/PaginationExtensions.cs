@@ -17,7 +17,7 @@ public static class PaginationExtensions
 
         return CreateResult(data, count, pagination);
     }
-    
+
     private static IQueryable<T> ApplyPaging<T>(this IQueryable<T> queryable, PaginationDto paginationDto)
     {
         return paginationDto.Limit is null or 0

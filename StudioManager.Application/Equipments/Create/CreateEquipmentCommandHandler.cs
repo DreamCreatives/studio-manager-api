@@ -15,14 +15,11 @@ public sealed class CreateEquipmentCommandHandler(
     {
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-        var checkResult = await EquipmentChecker.
-            CheckEquipmentReferencesAsync(dbContext, null, request.Equipment, cancellationToken);
-            
-        if (!checkResult.Succeeded)
-        {
-            return checkResult.CommandResult;
-        }
-            
+        var checkResult =
+            await EquipmentChecker.CheckEquipmentReferencesAsync(dbContext, null, request.Equipment, cancellationToken);
+
+        if (!checkResult.Succeeded) return checkResult.CommandResult;
+
         var equipment = Equipment.Create(
             request.Equipment.Name,
             request.Equipment.EquipmentTypeId,
@@ -30,7 +27,7 @@ public sealed class CreateEquipmentCommandHandler(
 
         await dbContext.Equipments.AddAsync(equipment, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
-            
+
         return CommandResult.Success(equipment.Id);
     }
 }

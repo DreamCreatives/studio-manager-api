@@ -24,16 +24,16 @@ public sealed class Handle : IntegrationTestBase
         _dbContextFactory = new TestDbContextFactory<StudioManagerDbContext>(connectionString);
         _testCandidate = new CreateReservationCommandHandler(_dbContextFactory);
     }
-    
+
     [Test]
     public async Task should_return_conflict_when_equipment_not_found()
     {
         // Arrange
         var command = new CreateReservationCommand(new ReservationWriteDto(ValidDate, ValidDate, 1, Guid.NewGuid()));
-        
+
         // Act
         var result = await _testCandidate.Handle(command, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeFalse();
@@ -42,19 +42,21 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be(DB.RESERVATION_EQUIPMENT_NOT_FOUND);
     }
-    
+
     [Test]
     public async Task should_return_conflict_when_equipment_quantity_insufficient()
     {
         // Arrange
         await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
         var equipment = await ReservationTestHelper.AddEquipmentAsync(dbContext);
-        
-        var command = new CreateReservationCommand(new ReservationWriteDto(ValidDate, ValidDate, equipment.InitialQuantity + 1, equipment.Id));
-        
+
+        var command =
+            new CreateReservationCommand(new ReservationWriteDto(ValidDate, ValidDate, equipment.InitialQuantity + 1,
+                equipment.Id));
+
         // Act
         var result = await _testCandidate.Handle(command, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeFalse();
@@ -69,13 +71,15 @@ public sealed class Handle : IntegrationTestBase
     {
         // Arrange
         await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
-        var reservation = await ReservationTestHelper.AddReservationForDetailsAsync(dbContext, ValidDate, ValidDate.AddDays(10));
-        
-        var command = new CreateReservationCommand(new ReservationWriteDto(ValidDate.AddDays(1), ValidDate.AddDays(2), reservation.Quantity, reservation.EquipmentId));
-        
+        var reservation =
+            await ReservationTestHelper.AddReservationForDetailsAsync(dbContext, ValidDate, ValidDate.AddDays(10));
+
+        var command = new CreateReservationCommand(new ReservationWriteDto(ValidDate.AddDays(1), ValidDate.AddDays(2),
+            reservation.Quantity, reservation.EquipmentId));
+
         // Act
         var result = await _testCandidate.Handle(command, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeFalse();
@@ -84,7 +88,7 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be(DB.RESERVATION_EQUIPMENT_USED_BY_OTHERS_IN_PERIOD);
     }
-    
+
     [Test]
     public async Task should_return_success_when_reservation_is_valid()
     {
@@ -92,12 +96,13 @@ public sealed class Handle : IntegrationTestBase
         await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
         await ClearTableContentsForAsync<Reservation>(dbContext);
         var equipment = await ReservationTestHelper.AddEquipmentAsync(dbContext);
-        
-        var command = new CreateReservationCommand(new ReservationWriteDto(ValidDate, ValidDate.AddDays(1), 1, equipment.Id));
-        
+
+        var command =
+            new CreateReservationCommand(new ReservationWriteDto(ValidDate, ValidDate.AddDays(1), 1, equipment.Id));
+
         // Act
         var result = await _testCandidate.Handle(command, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeTrue();

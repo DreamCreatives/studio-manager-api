@@ -16,21 +16,16 @@ public sealed class UpdateReservationCommandHandler(
     {
         var reservation = request.Reservation;
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-        
-        var checkResult = await ReservationsChecker.CheckReservationAsync(dbContext, reservation, request.Id, cancellationToken);
-        
-        if (!checkResult.Succeeded)
-        {
-            return checkResult;
-        }
-        
+
+        var checkResult =
+            await ReservationsChecker.CheckReservationAsync(dbContext, reservation, request.Id, cancellationToken);
+
+        if (!checkResult.Succeeded) return checkResult;
+
         var dbReservation = await dbContext.GetReservationAsync(request.Id, cancellationToken);
 
-        if (dbReservation is null)
-        {
-            return CommandResult.NotFound<Reservation>(request.Id);
-        }
-        
+        if (dbReservation is null) return CommandResult.NotFound<Reservation>(request.Id);
+
         dbReservation.Update(reservation.StartDate, reservation.EndDate, reservation.Quantity, reservation.EquipmentId);
 
         dbContext.Reservations.Update(dbReservation);

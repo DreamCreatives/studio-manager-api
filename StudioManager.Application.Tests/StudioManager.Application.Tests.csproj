@@ -11,24 +11,24 @@
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="FluentAssertions" Version="6.12.0" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.Testing" Version="8.5.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-        <PackageReference Include="NUnit" Version="4.1.0" />
+        <PackageReference Include="FluentAssertions" Version="6.12.0"/>
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.Testing" Version="8.5.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0"/>
+        <PackageReference Include="NUnit" Version="4.1.0"/>
         <PackageReference Include="NUnit.Analyzers" Version="4.2.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\StudioManager.Application\StudioManager.Application.csproj" />
-      <ProjectReference Include="..\StudioManager.Domain\StudioManager.Domain.csproj" />
-      <ProjectReference Include="..\StudioManager.Tests.Common\StudioManager.Tests.Common.csproj" />
+        <ProjectReference Include="..\StudioManager.Application\StudioManager.Application.csproj"/>
+        <ProjectReference Include="..\StudioManager.Domain\StudioManager.Domain.csproj"/>
+        <ProjectReference Include="..\StudioManager.Tests.Common\StudioManager.Tests.Common.csproj"/>
     </ItemGroup>
 
 </Project>

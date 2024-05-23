@@ -14,7 +14,7 @@ internal static class ReservationTestHelper
         await dbContext.Equipments.ExecuteDeleteAsync();
         var equipmentType = EquipmentType.Create("Test Equipment Type");
         var equipment = Equipment.Create("Test Equipment", equipmentType.Id, 100);
-        
+
         await dbContext.EquipmentTypes.AddAsync(equipmentType);
         await dbContext.Equipments.AddAsync(equipment);
         await dbContext.SaveChangesAsync();
@@ -28,7 +28,7 @@ internal static class ReservationTestHelper
         int? quantity = null)
     {
         var equipment = await AddEquipmentAsync(dbContext);
-        
+
         var reservation = Reservation.Create(
             startDate,
             endDate,
@@ -39,7 +39,7 @@ internal static class ReservationTestHelper
         await dbContext.SaveChangesAsync();
         return reservation;
     }
-    
+
     internal static async Task AddReservationForEquipmentAsync(DbContextBase dbContext,
         Guid equipmentId)
     {
@@ -52,7 +52,7 @@ internal static class ReservationTestHelper
         await dbContext.Reservations.AddAsync(reservation);
         await dbContext.SaveChangesAsync();
     }
-    
+
     internal static async Task<Reservation> AddReservationAsync(DbContextBase dbContext)
     {
         var equipment = await AddEquipmentAsync(dbContext);

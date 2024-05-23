@@ -6,7 +6,7 @@ public sealed class PaginationDto
 {
     public const int DefaultLimit = 50;
     public const int DefaultPage = 1;
-    
+
     private int? _limit;
     private int? _page;
 
@@ -26,11 +26,8 @@ public sealed class PaginationDto
 
     public int GetOffset()
     {
-        if (!Page.HasValue)
-        {
-            return 0;
-        }
-        
+        if (!Page.HasValue) return 0;
+
         return Limit!.Value * (Page!.Value - 1);
     }
 }

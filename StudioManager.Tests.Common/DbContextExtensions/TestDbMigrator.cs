@@ -25,7 +25,7 @@ public class TestDbMigrator<TContext>
         await context.Database.MigrateAsync();
         return _postgresContainer.GetConnectionString();
     }
-    
+
     public async Task ClearAsync()
     {
         await using var context = CreateDb();
@@ -43,17 +43,16 @@ public class TestDbMigrator<TContext>
             .EnableSensitiveDataLogging();
 
         dbContextOptionsBuilder.UseNpgsql(_postgresContainer.GetConnectionString(),
-            npgsql =>
-            {
-                npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-            }).UseSnakeCaseNamingConvention();
-        
+                npgsql => { npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery); })
+            .UseSnakeCaseNamingConvention();
+
         var mediator = new Mock<IMediator>();
         mediator.Setup(x => x.Publish(
             It.IsAny<INotification>(),
             It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-        var dbContext = (TContext)Activator.CreateInstance(typeof(TContext), dbContextOptionsBuilder.Options, mediator.Object)!;
+        var dbContext =
+            (TContext)Activator.CreateInstance(typeof(TContext), dbContextOptionsBuilder.Options, mediator.Object)!;
         return dbContext;
     }
 }
