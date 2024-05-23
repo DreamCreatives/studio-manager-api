@@ -5,14 +5,16 @@ namespace StudioManager.Domain.Common.Results;
 [ExcludeFromCodeCoverage]
 public sealed class CheckResult<T>
 {
-    private CheckResult() { }
-    
+    private CheckResult()
+    {
+    }
+
     public bool Succeeded { get; private set; }
     public T Data { get; private set; } = default!;
     public CommandResult CommandResult { get; private set; } = default!;
 
     /// <summary>
-    /// Creates successful result with data and success command result (with empty data)
+    ///     Creates successful result with data and success command result (with empty data)
     /// </summary>
     /// <param name="data">data to return as Generic parameter</param>
     /// <returns>successful check with data of type T</returns>
@@ -27,7 +29,7 @@ public sealed class CheckResult<T>
     }
 
     /// <summary>
-    /// Returns failed result with NotFound command result
+    ///     Returns failed result with NotFound command result
     /// </summary>
     /// <param name="id">id of entity that was not found</param>
     /// <typeparam name="TEntity">Type of entity that was not found</typeparam>
@@ -36,9 +38,9 @@ public sealed class CheckResult<T>
     {
         return Fail(CommandResult.NotFound<TEntity>(id));
     }
-    
+
     /// <summary>
-    /// Returns failed result with Conflict command result
+    ///     Returns failed result with Conflict command result
     /// </summary>
     /// <param name="message">Message to pass to conflict command resukt</param>
     /// <returns>failed check with empty data and Conflict CommandResult</returns>
@@ -46,7 +48,7 @@ public sealed class CheckResult<T>
     {
         return Fail(CommandResult.Conflict(message));
     }
-    
+
     private static CheckResult<T> Fail(CommandResult result)
     {
         return new CheckResult<T>
@@ -60,13 +62,15 @@ public sealed class CheckResult<T>
 
 public sealed class CheckResult
 {
-    private CheckResult() { }
-    
+    private CheckResult()
+    {
+    }
+
     public bool Succeeded { get; private set; }
     public CommandResult CommandResult { get; private set; } = default!;
 
     /// <summary>
-    /// Creates successful result with success command result
+    ///     Creates successful result with success command result
     /// </summary>
     /// <returns>successful check with success command result</returns>
     public static CheckResult Success()
@@ -79,7 +83,7 @@ public sealed class CheckResult
     }
 
     /// <summary>
-    /// Returns failed result with NotFound command result
+    ///     Returns failed result with NotFound command result
     /// </summary>
     /// <param name="result">Command result to return</param>
     /// <returns>failed check with NotFound CommandResult</returns>

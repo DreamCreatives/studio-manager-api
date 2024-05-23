@@ -31,12 +31,12 @@ public sealed class Handle : IntegrationTestBase
         {
             await ClearTableContentsForAsync<EquipmentType>(dbContext);
         }
-        
+
         var query = new GetEquipmentTypesQuery { Filter = new EquipmentTypeFilter() };
-        
+
         // Act
         var result = await _testCandidate.Handle(query, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Error.Should().BeNullOrWhiteSpace();
@@ -46,7 +46,7 @@ public sealed class Handle : IntegrationTestBase
         result.Data.Should().BeEmpty();
         result.Data.Should().BeOfType<List<EquipmentTypeReadDto>>();
     }
-    
+
     [Test]
     public async Task should_return_mapped_data_async()
     {
@@ -57,12 +57,12 @@ public sealed class Handle : IntegrationTestBase
             var equipmentTypes = Enumerable.Range(0, 5).Select(x => EquipmentType.Create(x.ToString())).ToArray();
             await AddEntitiesToTable(dbContext, equipmentTypes);
         }
-        
+
         var query = new GetEquipmentTypesQuery { Filter = new EquipmentTypeFilter() };
-        
+
         // Act
         var result = await _testCandidate.Handle(query, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Error.Should().BeNullOrWhiteSpace();
@@ -73,7 +73,7 @@ public sealed class Handle : IntegrationTestBase
         result.Data!.Count.Should().Be(5);
         result.Data.Should().BeOfType<List<EquipmentTypeReadDto>>();
     }
-    
+
     [Test]
     public async Task should_return_mapped_and_filtered_data_async()
     {
@@ -84,12 +84,12 @@ public sealed class Handle : IntegrationTestBase
             var equipmentTypes = Enumerable.Range(0, 5).Select(x => EquipmentType.Create(x.ToString())).ToArray();
             await AddEntitiesToTable(dbContext, equipmentTypes);
         }
-        
+
         var query = new GetEquipmentTypesQuery { Filter = new EquipmentTypeFilter { Name = "1" } };
-        
+
         // Act
         var result = await _testCandidate.Handle(query, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Error.Should().BeNullOrWhiteSpace();

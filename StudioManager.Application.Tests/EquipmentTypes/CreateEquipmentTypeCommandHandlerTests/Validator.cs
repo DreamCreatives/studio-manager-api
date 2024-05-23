@@ -21,9 +21,10 @@ public sealed class Validator
 
         // Assert
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(x => x.PropertyName == "EquipmentType.Name" && x.ErrorMessage == "'Name' must not be empty.");
+        result.Errors.Should().Contain(x =>
+            x.PropertyName == "EquipmentType.Name" && x.ErrorMessage == "'Name' must not be empty.");
     }
-    
+
     [Test]
     public async Task validator_should_return_success_when_name_is_not_empty()
     {

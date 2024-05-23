@@ -11,7 +11,7 @@ namespace StudioManager.API.Base;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[Produces(contentType: "application/json", "application/problem+json")]
+[Produces("application/json", "application/problem+json")]
 [ExcludeFromCodeCoverage]
 //[Authorize(Policy = "AuthorizedUser")]
 public abstract class CoreController(ISender sender) : ControllerBase
@@ -22,7 +22,7 @@ public abstract class CoreController(ISender sender) : ControllerBase
 
         return CreateResult(result);
     }
-    
+
     internal async Task<IResult> SendAsync<T>(IRequest<QueryResult<T>> request)
     {
         var result = await sender.Send(request);
@@ -40,47 +40,35 @@ public abstract class CoreController(ISender sender) : ControllerBase
             _ => FromUnexpectedErrorResult(requestResult)
         };
     }
-    
+
     private static IResult FromSucceededResult<T>(IRequestResult<T> requestResult)
     {
-        if (!requestResult.Succeeded)
-        {
-            throw new InvalidOperationException(EX.SUCCESS_FROM_ERROR);
-        }
-        
+        if (!requestResult.Succeeded) throw new InvalidOperationException(EX.SUCCESS_FROM_ERROR);
+
         return Results.Ok(requestResult.Data);
     }
-    
+
     private static IResult FromNotFoundResult<T>(IRequestResult<T> requestResult)
     {
-        if (requestResult.Succeeded)
-        {
-            throw new InvalidOperationException(EX.ERROR_FROM_SUCCESS);
-        }
+        if (requestResult.Succeeded) throw new InvalidOperationException(EX.ERROR_FROM_SUCCESS);
 
         return Results.Problem(
             statusCode: StatusCodes.Status404NotFound,
             detail: requestResult.Error);
     }
-    
+
     private static IResult FromConflictResult<T>(IRequestResult<T> requestResult)
     {
-        if (requestResult.Succeeded)
-        {
-            throw new InvalidOperationException(EX.ERROR_FROM_SUCCESS);
-        }
+        if (requestResult.Succeeded) throw new InvalidOperationException(EX.ERROR_FROM_SUCCESS);
 
         return Results.Problem(
             statusCode: StatusCodes.Status409Conflict,
             detail: requestResult.Error);
     }
-    
+
     private static IResult FromUnexpectedErrorResult<T>(IRequestResult<T> requestResult)
     {
-        if (requestResult.Succeeded)
-        {
-            throw new InvalidOperationException(EX.ERROR_FROM_SUCCESS);
-        }
+        if (requestResult.Succeeded) throw new InvalidOperationException(EX.ERROR_FROM_SUCCESS);
 
         return Results.Problem(
             statusCode: StatusCodes.Status500InternalServerError,

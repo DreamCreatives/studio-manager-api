@@ -32,11 +32,11 @@ public sealed class Handle : IntegrationTestBase
     public async Task should_return_empty_data_with_pagination_async()
     {
         // Arrange
-        var query = new GetAllEquipmentsQuery(new EquipmentFilter(), PaginationDto.Default());
-        
+        var query = new GetAllEquipmentsQuery(new EquipmentFilter(), new PaginationDto());
+
         // Act
         var result = await _testCandidate.Handle(query, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Error.Should().BeNullOrWhiteSpace();
@@ -47,7 +47,7 @@ public sealed class Handle : IntegrationTestBase
         result.Data!.Data.Should().BeEmpty();
         result.Data.Data.Should().BeOfType<List<EquipmentReadDto>>();
     }
-    
+
     [Test]
     public async Task should_return_mapped_data_with_pagination_async()
     {
@@ -64,11 +64,12 @@ public sealed class Handle : IntegrationTestBase
                 .ToArray();
             await AddEntitiesToTable(dbContext, equipments);
         }
-        var query = new GetAllEquipmentsQuery(new EquipmentFilter(), PaginationDto.Default());
-        
+
+        var query = new GetAllEquipmentsQuery(new EquipmentFilter(), new PaginationDto());
+
         // Act
         var result = await _testCandidate.Handle(query, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Error.Should().BeNullOrWhiteSpace();
@@ -77,8 +78,8 @@ public sealed class Handle : IntegrationTestBase
         result.Data.Should().NotBeNull();
         result.Data.Should().BeOfType<PagingResultDto<EquipmentReadDto>>();
         result.Data!.Pagination.Should().NotBeNull();
-        result.Data.Pagination.Limit.Should().Be(25);
-        result.Data.Pagination.Page.Should().Be(1);
+        result.Data.Pagination.Limit.Should().Be(PaginationDto.DefaultLimit);
+        result.Data.Pagination.Page.Should().Be(PaginationDto.DefaultPage);
         result.Data.Pagination.Total.Should().Be(5);
         result.Data.Data.Should().NotBeEmpty();
         result.Data.Data.Should().HaveCount(5);

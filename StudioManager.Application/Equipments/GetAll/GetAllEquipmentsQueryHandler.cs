@@ -15,10 +15,12 @@ public sealed class GetAllEquipmentsQueryHandler(
     IDbContextFactory<StudioManagerDbContext> dbContextFactory)
     : IRequestHandler<GetAllEquipmentsQuery, QueryResult<PagingResultDto<EquipmentReadDto>>>
 {
-    public async Task<QueryResult<PagingResultDto<EquipmentReadDto>>> Handle(GetAllEquipmentsQuery request, CancellationToken cancellationToken)
+    public async Task<QueryResult<PagingResultDto<EquipmentReadDto>>> Handle(GetAllEquipmentsQuery request,
+        CancellationToken cancellationToken)
     {
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         var data = dbContext.Equipments
+            .AsNoTracking()
             .Where(request.Filter.ToQuery())
             .ProjectTo<EquipmentReadDto>(mapper.ConfigurationProvider);
 

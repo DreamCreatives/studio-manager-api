@@ -19,10 +19,10 @@ public sealed class EquipmentProjectionTests
         var equipment = Equipment.Create("Test Equipment", equipmentType.Id, 1);
         equipment.EquipmentType = equipmentType;
         var mapper = MappingTestHelper.Mapper;
-        
+
         // Act
         var result = mapper.Map<EquipmentReadDto>(equipment);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Id.Should().NotBeEmpty();

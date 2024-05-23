@@ -10,22 +10,13 @@ public sealed class Equipment : EntityBase
     public int InitialQuantity { get; private set; }
     public string ImageUrl { get; private set; } = default!;
 
-
-    #region EntityRelations
-    
-    public EquipmentType EquipmentType { get; set; } = default!;
-
-    #endregion
-    
-    public void Reserve(int quantity)
+    public void Reserve(int quantity, int initialQuantity = 0)
     {
+        Quantity += initialQuantity;
         Quantity -= quantity;
-        if (Quantity < 0)
-        {
-            throw new InvalidOperationException(EX.EQUIPMENT_NEGATIVE_QUANTITY);
-        }
+        if (Quantity < 0) throw new InvalidOperationException(EX.EQUIPMENT_NEGATIVE_QUANTITY);
     }
-    
+
     public static Equipment Create(string name, Guid equipmentTypeId, int quantity)
     {
         const string imagePlaceholder = "https://cdn3.iconfinder.com/data/icons/objects/512/equipment-512.png";
@@ -39,7 +30,7 @@ public sealed class Equipment : EntityBase
             ImageUrl = imagePlaceholder
         };
     }
-    
+
     public void Update(string name, Guid equipmentTypeId, int quantity)
     {
         Name = name;
@@ -47,4 +38,40 @@ public sealed class Equipment : EntityBase
         Quantity = quantity;
         InitialQuantity = quantity;
     }
+
+
+
+
+    #region EntityRelations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public EquipmentType EquipmentType { get; set; } = default!;
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #endregion
 }

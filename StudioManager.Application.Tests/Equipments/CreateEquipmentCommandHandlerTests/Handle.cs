@@ -29,10 +29,10 @@ public class Handle : IntegrationTestBase
         // Arrange
         var dto = new EquipmentWriteDto("Equipment-Test-Name", Guid.NewGuid(), 1);
         var command = new CreateEquipmentCommand(dto);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeFalse();
@@ -41,7 +41,7 @@ public class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be($"[NOT FOUND] {nameof(EquipmentType)} with id '{dto.EquipmentTypeId}' does not exist");
     }
-    
+
     [Test]
     public async Task should_return_error_when_equipment_has_duplicated_name_and_type_async()
     {
@@ -54,23 +54,23 @@ public class Handle : IntegrationTestBase
             await AddEntitiesToTable(dbContext, equipmentType);
             await AddEntitiesToTable(dbContext, existing);
         }
-        
+
         var dto = new EquipmentWriteDto("Equipment-Test-Name", existing.EquipmentTypeId, 1);
         var command = new CreateEquipmentCommand(dto);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeFalse();
         result.StatusCode.Should().Be(ConflictStatusCode);
         result.Data.Should().BeNull();
         result.Error.Should().NotBeNullOrWhiteSpace();
-        result.Error.Should().Be(string.Format(DB_FORMAT.EQUIPMENT_DUPLICATE_NAME_TYPE, 
+        result.Error.Should().Be(string.Format(DB_FORMAT.EQUIPMENT_DUPLICATE_NAME_TYPE,
             existing.Name, existing.EquipmentTypeId));
     }
-    
+
     [Test]
     public async Task should_return_success_async()
     {
@@ -83,13 +83,13 @@ public class Handle : IntegrationTestBase
             await ClearTableContentsForAsync<Equipment>(dbContext);
             await AddEntitiesToTable(dbContext, equipmentType);
         }
-        
+
         var dto = new EquipmentWriteDto("Equipment-Test-Name", equipmentType.Id, 1);
         var command = new CreateEquipmentCommand(dto);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeTrue();

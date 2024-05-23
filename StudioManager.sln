@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\build_test.yaml = .github\workflows\build_test.yaml
 		docker-compose.yml = docker-compose.yml
 		pg-init-scripts\create-multiple-postgresql-databases.sh = pg-init-scripts\create-multiple-postgresql-databases.sh
+		coverlet.runsettings = coverlet.runsettings
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Infrastructure", "StudioManager.Infrastructure\StudioManager.Infrastructure.csproj", "{08F62C62-D31E-4E64-929F-D5DBF0C78E10}"
@@ -22,6 +23,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Application.Tests", "StudioManager.Application.Tests\StudioManager.Application.Tests.csproj", "{F030658C-CEB0-47C1-95C5-E6BFC183D338}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Tests.Common", "StudioManager.Tests.Common\StudioManager.Tests.Common.csproj", "{8F76B06F-B382-4ECD-9F87-B4F9180CB25C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Notifications", "StudioManager.Notifications\StudioManager.Notifications.csproj", "{E1B4CFCA-4EC4-42DD-A104-C47F6529ED02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +60,10 @@ Global
 		{8F76B06F-B382-4ECD-9F87-B4F9180CB25C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F76B06F-B382-4ECD-9F87-B4F9180CB25C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F76B06F-B382-4ECD-9F87-B4F9180CB25C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1B4CFCA-4EC4-42DD-A104-C47F6529ED02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1B4CFCA-4EC4-42DD-A104-C47F6529ED02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1B4CFCA-4EC4-42DD-A104-C47F6529ED02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1B4CFCA-4EC4-42DD-A104-C47F6529ED02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F030658C-CEB0-47C1-95C5-E6BFC183D338} = {83545C4A-3E03-4336-8AE3-B06E8836DE35}

@@ -18,10 +18,7 @@ public static class EquipmentChecker
     {
         var result = await CheckIfEquipmentTypeExistAsync(dbContext, dto.EquipmentTypeId, cancellationToken);
 
-        if (!result.Succeeded)
-        {
-            return CheckResult.Fail(result.CommandResult);
-        }
+        if (!result.Succeeded) return CheckResult.Fail(result.CommandResult);
 
         var filter = new EquipmentFilter
         {
@@ -29,24 +26,24 @@ public static class EquipmentChecker
             ExactName = dto.Name,
             EquipmentTypeId = dto.EquipmentTypeId
         };
-        
+
         return await EquipmentHasUniqueName(dbContext, filter, cancellationToken);
     }
-    
+
     private static async Task<CheckResult> EquipmentHasUniqueName(DbContextBase dbContext,
         EquipmentFilter filter,
         CancellationToken cancellationToken = default)
     {
-        var existing =  await dbContext.GetEquipmentAsync(filter, cancellationToken);
-        
+        var existing = await dbContext.GetEquipmentAsync(filter, cancellationToken);
+
         return existing is null
             ? CheckResult.Success()
             : CheckResult.Fail(
                 CommandResult.Conflict(
-                    string.Format(DB_FORMAT.EQUIPMENT_DUPLICATE_NAME_TYPE, 
+                    string.Format(DB_FORMAT.EQUIPMENT_DUPLICATE_NAME_TYPE,
                         existing.Name, existing.EquipmentTypeId)));
     }
-    
+
     private static async Task<CheckResult> CheckIfEquipmentTypeExistAsync(
         DbContextBase dbContext,
         Guid equipmentTypeId,

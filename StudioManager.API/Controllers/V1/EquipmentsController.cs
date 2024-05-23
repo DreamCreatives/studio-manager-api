@@ -15,9 +15,9 @@ using StudioManager.Domain.Filters;
 namespace StudioManager.API.Controllers.V1;
 
 [ApiVersion("1.0")]
-[Route("api/v{v:apiVersion}/Equipments")]
+[Route("api/v{v:apiVersion}/[controller]")]
 [ExcludeFromCodeCoverage]
-public class EquipmentController(ISender sender) : CoreController(sender)
+public class EquipmentsController(ISender sender) : CoreController(sender)
 {
     [HttpPost]
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
@@ -26,7 +26,7 @@ public class EquipmentController(ISender sender) : CoreController(sender)
         var command = new CreateEquipmentCommand(dto);
         return await SendAsync(command);
     }
-    
+
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
     public async Task<IResult> DeleteEquipment(Guid id)
@@ -34,7 +34,7 @@ public class EquipmentController(ISender sender) : CoreController(sender)
         var command = new DeleteEquipmentCommand(id);
         return await SendAsync(command);
     }
-    
+
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
     public async Task<IResult> UpdateEquipment(Guid id, [FromBody] EquipmentWriteDto dto)
@@ -42,15 +42,14 @@ public class EquipmentController(ISender sender) : CoreController(sender)
         var command = new UpdateEquipmentCommand(id, dto);
         return await SendAsync(command);
     }
-    
+
     [HttpGet]
     [ProducesResponseType(typeof(QueryResult<PagingResultDto<EquipmentReadDto>>), StatusCodes.Status200OK)]
     public async Task<IResult> GetEquipments(
-        [FromQuery] PaginationDto? pagination,
+        [FromQuery] PaginationDto pagination,
         [FromQuery] IEnumerable<Guid> equipmentTypes,
         [FromQuery] string? ft)
     {
-        pagination ??= PaginationDto.Default();
         var filter = CreateFilter(ft, equipmentTypes);
         var command = new GetAllEquipmentsQuery(filter, pagination);
         return await SendAsync(command);

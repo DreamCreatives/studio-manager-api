@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace StudioManager.Tests.Common.DbContextExtensions;
 
@@ -7,8 +9,9 @@ namespace StudioManager.Tests.Common.DbContextExtensions;
 public class TestDbContextFactory<TContext>(string? connectionString) : IDbContextFactory<TContext>
     where TContext : DbContext
 {
-    private readonly string? _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-    
+    private readonly string? _connectionString =
+        connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+
     public TContext CreateDbContext()
     {
         throw new InvalidOperationException("This method should not be called. Use CreateDbContextAsync instead.");
@@ -18,19 +21,23 @@ public class TestDbContextFactory<TContext>(string? connectionString) : IDbConte
     {
         return Task.FromResult(CreateDbContext<TContext>());
     }
-    
+
     private TDbContext CreateDbContext<TDbContext>() where TDbContext : DbContext
     {
         var dbContextOptionsBuilder = new DbContextOptionsBuilder<TDbContext>()
             .EnableSensitiveDataLogging();
 
         dbContextOptionsBuilder.UseNpgsql(_connectionString,
-            npgsql =>
-            {
-                npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-            }).UseSnakeCaseNamingConvention();
+                npgsql => { npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery); })
+            .UseSnakeCaseNamingConvention();
 
-        var dbContext = (TDbContext)Activator.CreateInstance(typeof(TDbContext), dbContextOptionsBuilder.Options)!;
+        var mediator = new Mock<IMediator>();
+        mediator.Setup(x => x.Publish(
+            It.IsAny<INotification>(),
+            It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
+        var dbContext =
+            (TDbContext)Activator.CreateInstance(typeof(TDbContext), dbContextOptionsBuilder.Options, mediator.Object)!;
         return dbContext;
     }
 }

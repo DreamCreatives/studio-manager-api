@@ -29,10 +29,10 @@ public sealed class Handle : IntegrationTestBase
         // Arrange
         var dto = new EquipmentWriteDto("Test-Equipment", Guid.NewGuid(), 1);
         var command = new UpdateEquipmentCommand(Guid.NewGuid(), dto);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeFalse();
@@ -41,7 +41,7 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be($"[NOT FOUND] {nameof(EquipmentType)} with id '{dto.EquipmentTypeId}' does not exist");
     }
-    
+
     [Test]
     public async Task should_return_conflict_when_equipment_name_and_type_is_not_unique_async()
     {
@@ -54,23 +54,23 @@ public sealed class Handle : IntegrationTestBase
             await AddEntitiesToTable(dbContext, equipmentType);
             await AddEntitiesToTable(dbContext, equipment);
         }
-        
+
         var dto = new EquipmentWriteDto(equipment.Name, equipmentType.Id, 100);
         var command = new UpdateEquipmentCommand(Guid.NewGuid(), dto);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeFalse();
         result.StatusCode.Should().Be(ConflictStatusCode);
         result.Data.Should().BeNull();
         result.Error.Should().NotBeNullOrWhiteSpace();
-        result.Error.Should().Be(string.Format(DB_FORMAT.EQUIPMENT_DUPLICATE_NAME_TYPE, 
+        result.Error.Should().Be(string.Format(DB_FORMAT.EQUIPMENT_DUPLICATE_NAME_TYPE,
             equipment.Name, equipmentType.Id));
     }
-    
+
     [Test]
     public async Task should_return_not_found_when_equipment_does_not_exist_async()
     {
@@ -85,13 +85,13 @@ public sealed class Handle : IntegrationTestBase
             await AddEntitiesToTable(dbContext, equipmentType);
             await AddEntitiesToTable(dbContext, equipment);
         }
-        
+
         var dto = new EquipmentWriteDto("Test-Equipment-Updated", equipmentType.Id, 100);
         var command = new UpdateEquipmentCommand(Guid.NewGuid(), dto);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeFalse();
@@ -100,7 +100,7 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be($"[NOT FOUND] {nameof(Equipment)} with id '{command.Id}' does not exist");
     }
-    
+
     [Test]
     public async Task should_return_success_async()
     {
@@ -113,13 +113,13 @@ public sealed class Handle : IntegrationTestBase
             await AddEntitiesToTable(dbContext, equipmentType);
             await AddEntitiesToTable(dbContext, equipment);
         }
-        
+
         var dto = new EquipmentWriteDto("Test-Equipment-Updated", equipmentType.Id, 100);
         var command = new UpdateEquipmentCommand(equipment.Id, dto);
-        
+
         // Act
         var result = await _testCandidate.Handle(command, Cts.Token);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Succeeded.Should().BeTrue();

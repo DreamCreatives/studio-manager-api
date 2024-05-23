@@ -3,11 +3,11 @@
 on:
   push:
     branches:
-    - master
+      - master
   pull_request:
     branches:
-    - '**'
-  
+      - '**'
+
 jobs:
   build:
     name: Restore, Build and Test
@@ -18,21 +18,21 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-  
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-  
+
       - name: Restore Packages
         run: dotnet restore
-  
+
       - name: Build
         run: dotnet build --configuration Release
-        
+
       - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage"
-        
+        run: dotnet test --configuration Release --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+
       - name: Combine Coverage Reports
         uses: danielpalme/ReportGenerator-GitHub-Action@5.2.4
         with:
@@ -43,7 +43,7 @@ jobs:
           title: "Code Coverage"
           tag: "${{ github.run_number }}_${{ github.run_id }}"
           toolpath: "reportgeneratortool"
-          
+
       - name: Upload Combined Coverage XML
         uses: actions/upload-artifact@v4
         with:
