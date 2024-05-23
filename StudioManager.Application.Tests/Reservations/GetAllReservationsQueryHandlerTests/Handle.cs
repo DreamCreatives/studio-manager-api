@@ -36,7 +36,7 @@ public sealed class Handle : IntegrationTestBase
     public async Task should_return_data_async()
     {
         // Arrange
-        var query = new GetAllReservationsQuery(new ReservationFilter(), PaginationDto.Default());
+        var query = new GetAllReservationsQuery(new ReservationFilter(), new PaginationDto());
         
         // Act
         var result = await _testCandidate.Handle(query, CancellationToken.None);

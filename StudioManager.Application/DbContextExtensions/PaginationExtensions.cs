@@ -8,13 +8,6 @@ namespace StudioManager.Application.DbContextExtensions;
 [ExcludeFromCodeCoverage]
 public static class PaginationExtensions
 {
-    private static IQueryable<T> ApplyPaging<T>(this IQueryable<T> queryable, PaginationDto paginationDto)
-    {
-        return paginationDto.Limit == 0
-            ? queryable
-            : queryable.Skip(paginationDto.GetOffset()).Take(paginationDto.Limit);
-    }
-
     public static async Task<QueryResult<PagingResultDto<T>>> ApplyPagingAsync<T>(
         this IQueryable<T> queryable,
         PaginationDto pagination)
@@ -24,6 +17,13 @@ public static class PaginationExtensions
 
         return CreateResult(data, count, pagination);
     }
+    
+    private static IQueryable<T> ApplyPaging<T>(this IQueryable<T> queryable, PaginationDto paginationDto)
+    {
+        return paginationDto.Limit is null or 0
+            ? queryable
+            : queryable.Skip(paginationDto.GetOffset()).Take(paginationDto.Limit.Value);
+    }
 
     private static QueryResult<PagingResultDto<T>> CreateResult<T>(List<T> data, int count, PaginationDto pagination)
     {
@@ -32,8 +32,8 @@ public static class PaginationExtensions
             Data = data,
             Pagination = new PaginationDetailsDto
             {
-                Limit = pagination.Limit,
-                Page = pagination.Page,
+                Limit = pagination.Limit!.Value,
+                Page = pagination.Page!.Value,
                 Total = count
             }
         });

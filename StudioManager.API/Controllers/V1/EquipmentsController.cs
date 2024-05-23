@@ -46,11 +46,10 @@ public class EquipmentsController(ISender sender) : CoreController(sender)
     [HttpGet]
     [ProducesResponseType(typeof(QueryResult<PagingResultDto<EquipmentReadDto>>), StatusCodes.Status200OK)]
     public async Task<IResult> GetEquipments(
-        [FromQuery] PaginationDto? pagination,
+        [FromQuery] PaginationDto pagination,
         [FromQuery] IEnumerable<Guid> equipmentTypes,
         [FromQuery] string? ft)
     {
-        pagination ??= PaginationDto.Default();
         var filter = CreateFilter(ft, equipmentTypes);
         var command = new GetAllEquipmentsQuery(filter, pagination);
         return await SendAsync(command);

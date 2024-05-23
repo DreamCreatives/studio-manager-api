@@ -46,7 +46,7 @@ public sealed class ReservationsController(ISender sender) : CoreController(send
         [FromQuery] string? ft,
         [FromQuery] DateOnly? startDate,
         [FromQuery] DateOnly? endDate,
-        [FromQuery] PaginationDto? pagination)
+        [FromQuery] PaginationDto pagination)
     {
         var filter = new ReservationFilter
         {
@@ -54,8 +54,6 @@ public sealed class ReservationsController(ISender sender) : CoreController(send
             StartDate = startDate,
             EndDate = endDate
         };
-
-        pagination ??= PaginationDto.Default();
 
         return await SendAsync(new GetAllReservationsQuery(filter, pagination));
     }

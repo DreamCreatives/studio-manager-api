@@ -4,7 +4,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
-        <ExcludeDirectory>**/Migrations/, **/Infrastructure/Common/</ExcludeDirectory>
+        <Exclude>[*]StudioManager.Infrastructure,[*]StudioManager.Tests</Exclude>
         <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverage</ExcludeByAttribute>
         </Configuration>
       </DataCollector>

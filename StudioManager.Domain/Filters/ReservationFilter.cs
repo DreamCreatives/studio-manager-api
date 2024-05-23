@@ -3,7 +3,7 @@ using StudioManager.Domain.Entities;
 
 namespace StudioManager.Domain.Filters;
 
-public class ReservationFilter : IFilter<Reservation>
+public sealed class ReservationFilter : IFilter<Reservation>
 {
     public Guid? Id { get; init; }
     public Guid? NotId { get; init; }
@@ -17,16 +17,16 @@ public class ReservationFilter : IFilter<Reservation>
     public Expression<Func<Reservation, bool>> ToQuery()
     {
         var lowerSearch = Search?.ToLower();
-        
+
         return x =>
-            !Id.HasValue || x.Id == Id &&
-            !NotId.HasValue || x.Id != NotId &&
-            (lowerSearch == null || lowerSearch.Length == 0 || 
+            (!Id.HasValue || x.Id == Id) &&
+            (!NotId.HasValue || x.Id != NotId) &&
+            (lowerSearch == null || lowerSearch.Length == 0 ||
              x.Id.ToString().ToLower().Equals(lowerSearch) ||
              x.Equipment.Name.ToLower().Contains(lowerSearch)) &&
-            !StartDate.HasValue || x.StartDate >= StartDate &&
-            !EndDate.HasValue || x.EndDate <= EndDate &&
-            !MaxStartDate.HasValue || x.StartDate <= MaxStartDate &&
-            !MinEndDate.HasValue || x.EndDate >= MinEndDate;
+            (!StartDate.HasValue || x.StartDate >= StartDate) &&
+            (!EndDate.HasValue || x.EndDate <= EndDate) &&
+            (!MaxStartDate.HasValue || x.StartDate <= MaxStartDate) &&
+            (!MinEndDate.HasValue || x.EndDate >= MinEndDate);
     }
 }

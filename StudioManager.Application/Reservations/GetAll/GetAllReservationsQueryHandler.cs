@@ -19,8 +19,8 @@ public sealed class GetAllReservationsQueryHandler(
     {
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         var data = dbContext.Reservations
-            .Where(request.Filter.ToQuery())
             .AsNoTracking()
+            .Where(request.Filter.ToQuery())
             .ProjectTo<ReservationReadDto>(mapper.ConfigurationProvider);
 
         return await data.ApplyPagingAsync(request.Pagination);
