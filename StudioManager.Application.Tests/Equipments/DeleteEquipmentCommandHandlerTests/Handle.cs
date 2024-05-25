@@ -25,7 +25,7 @@ public sealed class Handle : IntegrationTestBase
     }
 
     [Test]
-    public async Task should_return_not_found_when_updating_non_existing_entity_async()
+    public async Task should_return_not_found_when_removing_non_existing_entity_async()
     {
         // Arrange
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))

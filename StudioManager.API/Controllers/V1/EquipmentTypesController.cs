@@ -7,6 +7,7 @@ using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Application.EquipmentTypes.Create;
 using StudioManager.Application.EquipmentTypes.Delete;
 using StudioManager.Application.EquipmentTypes.GetAll;
+using StudioManager.Application.EquipmentTypes.GetById;
 using StudioManager.Application.EquipmentTypes.Update;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Filters;
@@ -51,6 +52,14 @@ public class EquipmentTypesController(ISender sender) : CoreController(sender)
     public async Task<IResult> DeleteEquipmentTypeAsync(Guid id)
     {
         var command = new DeleteEquipmentTypeCommand(id);
+        return await SendAsync(command);
+    }
+    
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(QueryResult<EquipmentTypeReadDto>), StatusCodes.Status200OK)]
+    public async Task<IResult> GetEquipmentTypeByIdAsync(Guid id)
+    {
+        var command = new GetEquipmentTypeByIdQuery(id);
         return await SendAsync(command);
     }
 

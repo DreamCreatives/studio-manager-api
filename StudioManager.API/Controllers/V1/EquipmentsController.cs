@@ -8,6 +8,7 @@ using StudioManager.API.Contracts.Pagination;
 using StudioManager.Application.Equipments.Create;
 using StudioManager.Application.Equipments.Delete;
 using StudioManager.Application.Equipments.GetAll;
+using StudioManager.Application.Equipments.GetById;
 using StudioManager.Application.Equipments.Update;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Filters;
@@ -53,6 +54,13 @@ public class EquipmentsController(ISender sender) : CoreController(sender)
         var filter = CreateFilter(ft, equipmentTypes);
         var command = new GetAllEquipmentsQuery(filter, pagination);
         return await SendAsync(command);
+    }
+    
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(QueryResult<EquipmentReadDto>), StatusCodes.Status200OK)]
+    public async Task<IResult> GetEquipmentById(Guid id)
+    {
+        return await SendAsync(new GetEquipmentByIdQuery(id));
     }
 
     private static EquipmentFilter CreateFilter(

@@ -5,6 +5,7 @@ namespace StudioManager.Domain.Entities;
 
 public abstract class EntityBase
 {
+    [NotMapped]
     private readonly List<INotification> _entityEvents = [];
     public Guid Id { get; protected init; }
 

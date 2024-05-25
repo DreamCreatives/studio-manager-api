@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudioManager.API.Base;
 using StudioManager.API.Contracts.Pagination;
 using StudioManager.API.Contracts.Reservations;
+using StudioManager.Application.Reservations.BetById;
 using StudioManager.Application.Reservations.Create;
 using StudioManager.Application.Reservations.Delete;
 using StudioManager.Application.Reservations.GetAll;
@@ -56,5 +57,12 @@ public sealed class ReservationsController(ISender sender) : CoreController(send
         };
 
         return await SendAsync(new GetAllReservationsQuery(filter, pagination));
+    }
+    
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(QueryResult<ReservationReadDto>), StatusCodes.Status200OK)]
+    public async Task<IResult> GetReservationById(Guid id)
+    {
+        return await SendAsync(new GetReservationByIdQuery(id));
     }
 }
