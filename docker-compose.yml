@@ -66,8 +66,8 @@
       context: .
       dockerfile: StudioManager.API/Dockerfile
     ports:
-      - 5000:5000
-      - 5001:5001
+      - 5450:5450
+      - 5451:5451
     environment:
-      - ASPNETCORE_URLS=http://+:5001
+      - ASPNETCORE_URLS=http://+:5451
     restart: unless-stopped
