@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using StudioManager.Application.Reservations.BetById;
+using StudioManager.Application.Reservations.GetById;
 
 namespace StudioManager.Application.Tests.Reservations.GetReservationByIdQueryHandlerTests;
 

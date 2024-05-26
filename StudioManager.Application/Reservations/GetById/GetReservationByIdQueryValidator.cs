@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace StudioManager.Application.Reservations.BetById;
+namespace StudioManager.Application.Reservations.GetById;
 
 public sealed class GetReservationByIdQueryValidator : AbstractValidator<GetReservationByIdQuery>
 {

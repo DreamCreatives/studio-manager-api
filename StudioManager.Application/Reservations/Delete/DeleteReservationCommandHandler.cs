@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.DbContextExtensions;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
@@ -10,7 +9,7 @@ namespace StudioManager.Application.Reservations.Delete;
 
 public sealed class DeleteReservationCommandHandler(
     IDbContextFactory<StudioManagerDbContext> dbContextFactory)
-    : IRequestHandler<DeleteReservationCommand, CommandResult>
+    : ICommandHandler<DeleteReservationCommand>
 {
     public async Task<CommandResult> Handle(DeleteReservationCommand request, CancellationToken cancellationToken)
     {

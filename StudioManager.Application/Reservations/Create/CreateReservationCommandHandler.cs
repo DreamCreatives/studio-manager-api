@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.Reservations.Common;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
@@ -10,7 +9,7 @@ namespace StudioManager.Application.Reservations.Create;
 
 public sealed class CreateReservationCommandHandler(
     IDbContextFactory<StudioManagerDbContext> dbContextFactory)
-    : IRequestHandler<CreateReservationCommand, CommandResult>
+    : ICommandHandler<CreateReservationCommand>
 {
     public async Task<CommandResult> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
     {

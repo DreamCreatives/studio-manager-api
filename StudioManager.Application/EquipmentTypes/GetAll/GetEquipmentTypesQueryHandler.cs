@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Domain.Common.Results;
@@ -11,7 +10,7 @@ namespace StudioManager.Application.EquipmentTypes.GetAll;
 public sealed class GetEquipmentTypesQueryHandler(
     IDbContextFactory<StudioManagerDbContext> dbContextFactory,
     IMapper mapper)
-    : IRequestHandler<GetEquipmentTypesQuery, QueryResult<List<EquipmentTypeReadDto>>>
+    : IQueryHandler<GetEquipmentTypesQuery, List<EquipmentTypeReadDto>>
 {
     public async Task<QueryResult<List<EquipmentTypeReadDto>>> Handle(
         GetEquipmentTypesQuery request,
