@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.DbContextExtensions;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
@@ -10,7 +9,7 @@ namespace StudioManager.Application.EquipmentTypes.Delete;
 
 public sealed class DeleteEquipmentTypeCommandHandler(
     IDbContextFactory<StudioManagerDbContext> dbContextFactory)
-    : IRequestHandler<DeleteEquipmentTypeCommand, CommandResult>
+    : ICommandHandler<DeleteEquipmentTypeCommand>
 {
     public async Task<CommandResult> Handle(DeleteEquipmentTypeCommand request, CancellationToken cancellationToken)
     {

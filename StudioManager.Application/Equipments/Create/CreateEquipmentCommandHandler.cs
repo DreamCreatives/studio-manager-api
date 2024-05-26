@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.Equipments.Common;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
@@ -9,7 +8,7 @@ namespace StudioManager.Application.Equipments.Create;
 
 public sealed class CreateEquipmentCommandHandler(
     IDbContextFactory<StudioManagerDbContext> dbContextFactory)
-    : IRequestHandler<CreateEquipmentCommand, CommandResult>
+    : ICommandHandler<CreateEquipmentCommand>
 {
     public async Task<CommandResult> Handle(CreateEquipmentCommand request, CancellationToken cancellationToken)
     {

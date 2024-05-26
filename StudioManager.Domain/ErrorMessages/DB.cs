@@ -105,6 +105,73 @@ public static class DB_FORMAT
         "Cannot remove equipment, the initial count ({0}) is not equal to the current count ({1})";
 
     public const string EQUIPMENT_DUPLICATE_NAME_TYPE = "Equipment with name {0} and type {1} already exists";
+    public const string EQUIPMENT_DOES_NOT_EXIST = "[NOT FOUND] Equipment with id '{0}' does not exist";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #endregion
+    #region Reservations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public const string RESERVATION_NOT_FOUND = "[NOT FOUND] Reservation with id '{0}' does not exist";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #endregion
+
+
+
+
+    #region EquipmentTypes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public const string EQUIPMENT_TYPE_NOT_FOUND = "[NOT FOUND] EquipmentType with id '{0}' does not exist";
 
 
 

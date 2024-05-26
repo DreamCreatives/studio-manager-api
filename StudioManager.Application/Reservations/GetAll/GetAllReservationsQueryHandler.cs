@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StudioManager.API.Contracts.Pagination;
 using StudioManager.API.Contracts.Reservations;
@@ -13,7 +12,7 @@ namespace StudioManager.Application.Reservations.GetAll;
 public sealed class GetAllReservationsQueryHandler(
     IDbContextFactory<StudioManagerDbContext> dbContextFactory,
     IMapper mapper)
-    : IRequestHandler<GetAllReservationsQuery, QueryResult<PagingResultDto<ReservationReadDto>>>
+    : IQueryHandler<GetAllReservationsQuery, PagingResultDto<ReservationReadDto>>
 {
     public async Task<QueryResult<PagingResultDto<ReservationReadDto>>> Handle(GetAllReservationsQuery request,
         CancellationToken cancellationToken)

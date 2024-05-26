@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.DbContextExtensions;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
@@ -11,7 +10,7 @@ namespace StudioManager.Application.EquipmentTypes.Update;
 
 public sealed class UpdateEquipmentTypeCommandHandler(
     IDbContextFactory<StudioManagerDbContext> dbContextFactory)
-    : IRequestHandler<UpdateEquipmentTypeCommand, CommandResult>
+    : ICommandHandler<UpdateEquipmentTypeCommand>
 {
     public async Task<CommandResult> Handle(UpdateEquipmentTypeCommand request, CancellationToken cancellationToken)
     {

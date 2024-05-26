@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StudioManager.API.Contracts.Equipments;
 using StudioManager.API.Contracts.Pagination;
@@ -13,7 +12,7 @@ namespace StudioManager.Application.Equipments.GetAll;
 public sealed class GetAllEquipmentsQueryHandler(
     IMapper mapper,
     IDbContextFactory<StudioManagerDbContext> dbContextFactory)
-    : IRequestHandler<GetAllEquipmentsQuery, QueryResult<PagingResultDto<EquipmentReadDto>>>
+    : IQueryHandler<GetAllEquipmentsQuery, PagingResultDto<EquipmentReadDto>>
 {
     public async Task<QueryResult<PagingResultDto<EquipmentReadDto>>> Handle(GetAllEquipmentsQuery request,
         CancellationToken cancellationToken)

@@ -8,6 +8,7 @@ using StudioManager.API.Contracts.Reservations;
 using StudioManager.Application.Reservations.Create;
 using StudioManager.Application.Reservations.Delete;
 using StudioManager.Application.Reservations.GetAll;
+using StudioManager.Application.Reservations.GetById;
 using StudioManager.Application.Reservations.Update;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Filters;
@@ -56,5 +57,12 @@ public sealed class ReservationsController(ISender sender) : CoreController(send
         };
 
         return await SendAsync(new GetAllReservationsQuery(filter, pagination));
+    }
+    
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(QueryResult<ReservationReadDto>), StatusCodes.Status200OK)]
+    public async Task<IResult> GetReservationById(Guid id)
+    {
+        return await SendAsync(new GetReservationByIdQuery(id));
     }
 }

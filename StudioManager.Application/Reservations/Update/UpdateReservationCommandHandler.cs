@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.DbContextExtensions;
 using StudioManager.Application.Reservations.Common;
 using StudioManager.Domain.Common.Results;
@@ -10,7 +9,7 @@ namespace StudioManager.Application.Reservations.Update;
 
 public sealed class UpdateReservationCommandHandler(
     IDbContextFactory<StudioManagerDbContext> dbContextFactory)
-    : IRequestHandler<UpdateReservationCommand, CommandResult>
+    : ICommandHandler<UpdateReservationCommand>
 {
     public async Task<CommandResult> Handle(UpdateReservationCommand request, CancellationToken cancellationToken)
     {
