@@ -26,7 +26,8 @@ public static class ReservationsChecker
         {
             NotId = notId,
             MinEndDate = newReservation.StartDate,
-            MaxStartDate = newReservation.EndDate
+            MaxStartDate = newReservation.EndDate,
+            EquipmentId = newReservation.EquipmentId
         };
 
         var reservations = await dbContext.GetReservationsAsync(existingReservationsFilter, cancellationToken);
