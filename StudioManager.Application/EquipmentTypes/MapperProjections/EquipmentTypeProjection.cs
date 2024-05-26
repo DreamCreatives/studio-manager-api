@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StudioManager.API.Contracts.Common;
 using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Domain.Entities;
 
@@ -9,5 +10,6 @@ public sealed class EquipmentTypeProjection : Profile
     public EquipmentTypeProjection()
     {
         CreateMap<EquipmentType, EquipmentTypeReadDto>();
+        CreateMap<EquipmentType, NamedBaseDto>();
     }
 }

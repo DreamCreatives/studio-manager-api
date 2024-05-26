@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StudioManager.API.Base;
@@ -15,8 +14,6 @@ using StudioManager.Domain.Filters;
 
 namespace StudioManager.API.Controllers.V1;
 
-[ApiVersion("1.0")]
-[Route("api/v{v:apiVersion}/[controller]")]
 [ExcludeFromCodeCoverage]
 public sealed class ReservationsController(ISender sender) : CoreController(sender)
 {

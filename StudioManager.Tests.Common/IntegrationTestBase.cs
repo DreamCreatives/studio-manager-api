@@ -17,7 +17,6 @@ public abstract class IntegrationTestBase
     protected const HttpStatusCode OkStatusCode = HttpStatusCode.OK;
     protected const HttpStatusCode ConflictStatusCode = HttpStatusCode.Conflict;
     protected const HttpStatusCode NotFoundStatusCode = HttpStatusCode.NotFound;
-    protected const HttpStatusCode UnexpectedErrorStatusCode = HttpStatusCode.InternalServerError;
     protected static readonly CancellationTokenSource Cts = new();
     protected static readonly IMapper Mapper = MappingTestHelper.Mapper;
 
