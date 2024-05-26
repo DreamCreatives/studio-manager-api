@@ -10,6 +10,7 @@ public sealed class ReservationFilter : IFilter<Reservation>
     public DateOnly? StartDate { get; init; }
     public DateOnly? EndDate { get; init; }
     public string? Search { get; init; }
+    public Guid? EquipmentId { get; init; }
 
     public DateOnly? MaxStartDate { get; init; }
     public DateOnly? MinEndDate { get; init; }
@@ -26,6 +27,7 @@ public sealed class ReservationFilter : IFilter<Reservation>
              x.Equipment.Name.ToLower().Contains(lowerSearch)) &&
             (!StartDate.HasValue || x.StartDate >= StartDate) &&
             (!EndDate.HasValue || x.EndDate <= EndDate) &&
+            (!EquipmentId.HasValue || x.EquipmentId == EquipmentId) &&
             (!MaxStartDate.HasValue || x.StartDate <= MaxStartDate) &&
             (!MinEndDate.HasValue || x.EndDate >= MinEndDate);
     }
