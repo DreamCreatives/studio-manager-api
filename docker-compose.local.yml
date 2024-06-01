@@ -1,0 +1,49 @@
+﻿services:
+  
+  #### STUDIOMANAGER DATABASE ####
+  studiomanager.keycloak.database:
+    image: postgres:latest
+    container_name: studiomanager.keycloak.database
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: P@ssw0rd
+      POSTGRES_DB: Keycloak
+    healthcheck:
+      test: 'pg_isready -U postgres --dbname=Keycloak'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./.containers/studiomanager-keycloak-db:/var/lib/postgresql/data
+    restart: unless-stopped
+  
+  
+  #### KEYCLOAK ####
+  
+  studiomanager.keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: studiomanager.keycloak
+    command: [ "start-dev", "--import-realm" ]
+    environment:
+      KC_LOG_LEVEL: debug
+      KC_DB_VENDOR: postgres
+      KC_DB_ADDR: studiomanager.keycloak.database
+      KC_DB_DATABASE: Keycloak
+      KC_DB_USER: postgres
+      KC_DB_PASSWORD: P@ssw0rd
+      
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 8080:8080
+      - 8443:8443
+    links:
+      - studiomanager.keycloak.database
+    depends_on:
+      studiomanager.keycloak.database:
+        condition: service_started
+    volumes:
+      - ./.containers/realm.json:/opt/keycloak/data/import/realm.json
+    restart: unless-stopped

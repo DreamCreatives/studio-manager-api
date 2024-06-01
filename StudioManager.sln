@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 		pg-init-scripts\create-multiple-postgresql-databases.sh = pg-init-scripts\create-multiple-postgresql-databases.sh
 		coverlet.runsettings = coverlet.runsettings
+		docker-compose.local.yml = docker-compose.local.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioManager.Infrastructure", "StudioManager.Infrastructure\StudioManager.Infrastructure.csproj", "{08F62C62-D31E-4E64-929F-D5DBF0C78E10}"

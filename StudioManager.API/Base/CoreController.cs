@@ -13,7 +13,7 @@ namespace StudioManager.API.Base;
 [Route("api/v{version:apiVersion}/[controller]")]
 [Produces("application/json", "application/problem+json")]
 [ExcludeFromCodeCoverage]
-//[Authorize(Policy = "AuthorizedUser")]
+//[Authorize(Policy = BearerTokenDefaults.AuthenticationScheme)]
 public abstract class CoreController(ISender sender) : ControllerBase
 {
     internal async Task<IResult> SendAsync(IRequest<CommandResult> request)
