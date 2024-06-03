@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using StudioManager.API.Contracts.Reservations;
+using StudioManager.Application.Common;
 using StudioManager.Application.Reservations.Create;
 using StudioManager.Application.Tests.Reservations.Common;
 using StudioManager.Domain.Entities;
@@ -16,13 +18,14 @@ public sealed class Handle : IntegrationTestBase
     private static readonly DateOnly ValidDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1));
     private static TestDbContextFactory<StudioManagerDbContext> _dbContextFactory = null!;
     private static CreateReservationCommandHandler _testCandidate = null!;
+    private static readonly Mock<ITokenDecryptor> TokenDecryptor = new();
 
     [SetUp]
     public async Task SetUpAsync()
     {
         var connectionString = await DbMigrator.MigrateDbAsync();
         _dbContextFactory = new TestDbContextFactory<StudioManagerDbContext>(connectionString);
-        _testCandidate = new CreateReservationCommandHandler(_dbContextFactory);
+        _testCandidate = new CreateReservationCommandHandler(_dbContextFactory, TokenDecryptor.Object);
     }
 
     [Test]
@@ -88,6 +91,55 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be(DB.RESERVATION_EQUIPMENT_USED_BY_OTHERS_IN_PERIOD);
     }
+    
+    [Test]
+    public async Task should_return_error_when_application_id_is_invalid()
+    {
+        // Arrange
+        await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
+        await ClearTableContentsForAsync<Reservation>(dbContext);
+        var equipment = await ReservationTestHelper.AddEquipmentAsync(dbContext);
+        TokenDecryptor.Setup(x => x.UserId).Returns(null as string);
+            
+        var command =
+            new CreateReservationCommand(new ReservationWriteDto(ValidDate, ValidDate.AddDays(1), 1, equipment.Id));
+
+        // Act
+        var result = await _testCandidate.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Succeeded.Should().BeFalse();
+        result.StatusCode.Should().Be(ConflictStatusCode);
+        result.Data.Should().BeNull();
+        result.Error.Should().NotBeNullOrWhiteSpace();
+        result.Error.Should().Be(string.Format(DB_FORMAT.RESERVATION_INVALID_APP_ID, "null"));
+    }
+    
+    [Test]
+    public async Task should_return_error_when_user_making_reservation_does_not_exist()
+    {
+        // Arrange
+        await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
+        await ClearTableContentsForAsync<Reservation>(dbContext);
+        var equipment = await ReservationTestHelper.AddEquipmentAsync(dbContext);
+        var userId = Guid.NewGuid();
+        TokenDecryptor.Setup(x => x.UserId).Returns(userId.ToString());
+            
+        var command =
+            new CreateReservationCommand(new ReservationWriteDto(ValidDate, ValidDate.AddDays(1), 1, equipment.Id));
+
+        // Act
+        var result = await _testCandidate.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Succeeded.Should().BeFalse();
+        result.StatusCode.Should().Be(NotFoundStatusCode);
+        result.Data.Should().BeNull();
+        result.Error.Should().NotBeNullOrWhiteSpace();
+        result.Error.Should().Be($"[NOT FOUND] {nameof(User)} with id '{userId}' does not exist");
+    }
 
     [Test]
     public async Task should_return_success_when_reservation_is_valid()
@@ -96,6 +148,8 @@ public sealed class Handle : IntegrationTestBase
         await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
         await ClearTableContentsForAsync<Reservation>(dbContext);
         var equipment = await ReservationTestHelper.AddEquipmentAsync(dbContext);
+        var user = await ReservationTestHelper.AddUserAsync(dbContext);
+        TokenDecryptor.Setup(x => x.UserId).Returns(user.Id.ToString());
 
         var command =
             new CreateReservationCommand(new ReservationWriteDto(ValidDate, ValidDate.AddDays(1), 1, equipment.Id));

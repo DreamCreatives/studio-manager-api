@@ -17,6 +17,7 @@ public abstract class DbContextBase(
     public DbSet<EquipmentType> EquipmentTypes { get; set; }
     public DbSet<Equipment> Equipments { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<User> Users { get; set; }
 
     private bool HasOpenTransaction => _transaction is not null;
 

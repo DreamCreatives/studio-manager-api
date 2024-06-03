@@ -27,4 +27,14 @@ public static class ReservationDatabaseExtensions
             .Where(filter.ToQuery())
             .FirstOrDefaultAsync(cancellationToken);
     }
+    
+    public static async Task<Reservation?> GetReservationAsync(
+        this DbContextBase dbContext,
+        ReservationFilter filter,
+        CancellationToken cancellationToken)
+    {
+        return await dbContext.Reservations
+            .Where(filter.ToQuery())
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 }

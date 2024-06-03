@@ -1,14 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StudioManager.Application.Common;
 using StudioManager.Application.Reservations.Common;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
+using StudioManager.Domain.ErrorMessages;
 using StudioManager.Infrastructure;
 using StudioManager.Notifications.Equipment;
 
 namespace StudioManager.Application.Reservations.Create;
 
 public sealed class CreateReservationCommandHandler(
-    IDbContextFactory<StudioManagerDbContext> dbContextFactory)
+    IDbContextFactory<StudioManagerDbContext> dbContextFactory,
+    ITokenDecryptor tokenDecryptor)
     : ICommandHandler<CreateReservationCommand>
 {
     public async Task<CommandResult> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
@@ -21,11 +24,23 @@ public sealed class CreateReservationCommandHandler(
 
         if (!checkResult.Succeeded) return checkResult;
 
+        var userIdString = tokenDecryptor.UserId;
+        
+        if (!Guid.TryParse(userIdString, out var userId))
+        {
+            return CommandResult.Conflict(string.Format(DB_FORMAT.RESERVATION_INVALID_APP_ID, userIdString ?? "null"));
+        }
+        
+        checkResult = await ReservationsChecker.CheckReservationUserAsync(dbContext, userId, cancellationToken);
+        
+        if (!checkResult.Succeeded) return checkResult;
+
         var dbReservation = Reservation.Create(
             reservation.StartDate,
             reservation.EndDate,
             reservation.Quantity,
-            reservation.EquipmentId);
+            reservation.EquipmentId,
+            userId);
 
         await dbContext.Reservations.AddAsync(dbReservation, cancellationToken);
 

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using StudioManager.Domain.ErrorMessages;
 
 namespace StudioManager.Domain.Common.Results;
 
@@ -49,6 +50,17 @@ public sealed class CommandResult : IRequestResult<object?>
             Data = default!,
             Error = error,
             StatusCode = HttpStatusCode.Conflict
+        };
+    }
+    
+    public static CommandResult Forbidden(string? error = null)
+    {
+        return new CommandResult
+        {
+            Succeeded = false,
+            Data = default!,
+            Error = error ?? DB.FORBIDDEN,
+            StatusCode = HttpStatusCode.Forbidden
         };
     }
 

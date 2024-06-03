@@ -26,6 +26,8 @@ builder.Services.ConfigureSwagger(builder.Configuration);
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.RegisterInfrastructure(builder.Configuration);
 builder.Services.RegisterApplication();
 builder.Services.RegisterApi(builder.Configuration);

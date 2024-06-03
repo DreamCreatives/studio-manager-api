@@ -6,6 +6,7 @@ public static class DB
 {
     public const string HAS_OPEN_TRANSACTION = "Transaction is already open";
     public const string NO_OPEN_TRANSACTION = "Transaction has not been started";
+    public const string FORBIDDEN = "You do not have permission to perform this action";
 
 
 
@@ -137,6 +138,8 @@ public static class DB_FORMAT
 
 
     public const string RESERVATION_NOT_FOUND = "[NOT FOUND] Reservation with id '{0}' does not exist";
+    public const string RESERVATION_USER_NOT_FOUND = "[NOT FOUND] User with id '{0}' does not exist";
+    public const string RESERVATION_INVALID_APP_ID = "UserId {0} is not valid application id.";
 
 
 
