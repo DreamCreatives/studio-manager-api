@@ -113,7 +113,7 @@ public sealed class Handle : IntegrationTestBase
         result.StatusCode.Should().Be(ConflictStatusCode);
         result.Data.Should().BeNull();
         result.Error.Should().NotBeNullOrWhiteSpace();
-        result.Error.Should().Be(string.Format(DB_FORMAT.RESERVATION_INVALID_APP_ID, "null"));
+        result.Error.Should().Be(string.Format(DB_FORMAT.RESERVATION_INVALID_APP_ID, "[unknown]"));
     }
     
     [Test]
