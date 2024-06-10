@@ -29,7 +29,6 @@ public sealed class EquipmentProjectionTests
         result.Id.Should().Be(equipment.Id);
         result.Name.Should().NotBeNullOrWhiteSpace();
         result.Name.Should().Be(equipment.Name);
-        result.Quantity.Should().Be(equipment.Quantity);
         result.InitialQuantity.Should().Be(equipment.InitialQuantity);
         result.EquipmentType.Should().NotBeNull();
         result.EquipmentType.Should().BeOfType<EquipmentTypeReadDto>();

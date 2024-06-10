@@ -3,7 +3,6 @@ using NUnit.Framework;
 using StudioManager.Application.Equipments.Delete;
 using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
-using StudioManager.Domain.ErrorMessages;
 using StudioManager.Infrastructure;
 using StudioManager.Tests.Common;
 using StudioManager.Tests.Common.DbContextExtensions;
@@ -47,39 +46,6 @@ public sealed class Handle : IntegrationTestBase
         result.StatusCode.Should().Be(NotFoundStatusCode);
         result.Error.Should().NotBeNullOrWhiteSpace();
         result.Error.Should().Be($"[NOT FOUND] {nameof(Equipment)} with id '{id}' does not exist");
-    }
-
-    [Test]
-    public async Task should_return_error_when_initial_count_is_invalid_async()
-    {
-        // Arrange
-        var equipmentType = EquipmentType.Create("Test-Equipment-Type");
-        var equipment = Equipment.Create("Test-Equipment", equipmentType.Id, 10);
-        await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
-        {
-            await ClearTableContentsForAsync<EquipmentType>(dbContext);
-            await ClearTableContentsForAsync<Equipment>(dbContext);
-            await AddEntitiesToTable(dbContext, equipmentType);
-            await AddEntitiesToTable(dbContext, equipment);
-            equipment.Reserve(1);
-            dbContext.Equipments.Update(equipment);
-            await dbContext.SaveChangesAsync(Cts.Token);
-        }
-
-        var command = new DeleteEquipmentCommand(equipment.Id);
-
-        // Act
-        var result = await _testCandidate.Handle(command, Cts.Token);
-
-        result.Should().NotBeNull();
-        result.Should().BeOfType<CommandResult>();
-        result.Data.Should().BeNull();
-        result.Succeeded.Should().BeFalse();
-        result.StatusCode.Should().Be(ConflictStatusCode);
-        result.Error.Should().NotBeNullOrWhiteSpace();
-        result.Error.Should().Be(string.Format(DB_FORMAT.EQUIPMENT_QUANTITY_MISSING_WHEN_REMOVING,
-            equipment.InitialQuantity,
-            equipment.Quantity));
     }
 
     [Test]

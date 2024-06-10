@@ -21,7 +21,7 @@ public static class ReservationsChecker
 
         if (equipment is null) return CommandResult.Conflict(DB.RESERVATION_EQUIPMENT_NOT_FOUND);
 
-        if (equipment.Quantity - newReservation.Quantity < 0)
+        if (equipment.InitialQuantity - newReservation.Quantity < 0)
             return CommandResult.Conflict(DB.RESERVATION_EQUIPMENT_QUANTITY_INSUFFICIENT);
 
         var existingReservationsFilter = new ReservationFilter
@@ -37,7 +37,7 @@ public static class ReservationsChecker
         if (reservations.Count <= 0) return CommandResult.Success();
 
         var reservedQuantities = reservations.Sum(r => r.Quantity);
-        return equipment.Quantity - reservedQuantities - newReservation.Quantity < 0
+        return equipment.InitialQuantity - reservedQuantities - newReservation.Quantity < 0
             ? CommandResult.Conflict(DB.RESERVATION_EQUIPMENT_USED_BY_OTHERS_IN_PERIOD)
             : CommandResult.Success();
     }

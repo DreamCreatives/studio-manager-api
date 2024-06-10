@@ -28,7 +28,7 @@ public sealed class CreateReservationCommandHandler(
         
         if (!Guid.TryParse(userIdString, out var userId))
         {
-            return CommandResult.Conflict(string.Format(DB_FORMAT.RESERVATION_INVALID_APP_ID, userIdString ?? "null"));
+            return CommandResult.Conflict(string.Format(DB_FORMAT.RESERVATION_INVALID_APP_ID, userIdString ?? "[unknown]"));
         }
         
         checkResult = await ReservationsChecker.CheckReservationUserAsync(dbContext, userId, cancellationToken);
