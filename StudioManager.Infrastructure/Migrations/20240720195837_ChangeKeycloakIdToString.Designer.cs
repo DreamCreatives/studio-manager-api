@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudioManager.Infrastructure;
@@ -11,9 +12,11 @@ using StudioManager.Infrastructure;
 namespace StudioManager.Infrastructure.Migrations
 {
     [DbContext(typeof(StudioManagerDbContext))]
-    partial class StudioManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240720195837_ChangeKeycloakIdToString")]
+    partial class ChangeKeycloakIdToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,6 +36,11 @@ namespace StudioManager.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("equipment_type_id");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("image_url");
+
                     b.Property<int>("InitialQuantity")
                         .HasColumnType("integer")
                         .HasColumnName("initial_quantity");
@@ -45,15 +53,8 @@ namespace StudioManager.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_equipments");
 
-                    b.HasIndex(new[] { "EquipmentTypeId" }, "IX_Equipment_EquipmentTypeId")
+                    b.HasIndex("EquipmentTypeId")
                         .HasDatabaseName("ix_equipments_equipment_type_id");
-
-                    b.HasIndex(new[] { "Name" }, "IX_Equipment_Name")
-                        .HasDatabaseName("ix_equipments_name");
-
-                    b.HasIndex(new[] { "Name", "EquipmentTypeId" }, "IX_Equipment_Name_EquipmentTypeId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_equipments_name_equipment_type_id");
 
                     b.ToTable("equipments", (string)null);
                 });
@@ -72,10 +73,6 @@ namespace StudioManager.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_equipment_types");
-
-                    b.HasIndex(new[] { "Name" }, "IX_EquipmentType_Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_equipment_types_name");
 
                     b.ToTable("equipment_types", (string)null);
                 });
@@ -110,13 +107,10 @@ namespace StudioManager.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_reservations");
 
-                    b.HasIndex(new[] { "EquipmentId" }, "IX_Reservations_EquipmentId")
+                    b.HasIndex("EquipmentId")
                         .HasDatabaseName("ix_reservations_equipment_id");
 
-                    b.HasIndex(new[] { "StartDate", "EndDate" }, "IX_Reservations_StartDate_EndDate")
-                        .HasDatabaseName("ix_reservations_start_date_end_date");
-
-                    b.HasIndex(new[] { "UserId" }, "IX_Reservations_UserId")
+                    b.HasIndex("UserId")
                         .HasDatabaseName("ix_reservations_user_id");
 
                     b.ToTable("reservations", (string)null);
@@ -136,8 +130,7 @@ namespace StudioManager.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("text")
                         .HasColumnName("first_name");
 
                     b.Property<string>("KeycloakId")
@@ -147,20 +140,11 @@ namespace StudioManager.Infrastructure.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("text")
                         .HasColumnName("last_name");
 
                     b.HasKey("Id")
                         .HasName("pk_users");
-
-                    b.HasIndex(new[] { "Email" }, "IX_Users_Email")
-                        .IsUnique()
-                        .HasDatabaseName("ix_users_email");
-
-                    b.HasIndex(new[] { "KeycloakId" }, "IX_Users_KeycloakId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_users_keycloak_id");
 
                     b.ToTable("users", (string)null);
                 });
@@ -170,7 +154,7 @@ namespace StudioManager.Infrastructure.Migrations
                     b.HasOne("StudioManager.Domain.Entities.EquipmentType", "EquipmentType")
                         .WithMany("Equipments")
                         .HasForeignKey("EquipmentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_equipments_equipment_types_equipment_type_id");
 

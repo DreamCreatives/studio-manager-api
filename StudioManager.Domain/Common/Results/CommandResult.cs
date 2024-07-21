@@ -59,7 +59,7 @@ public sealed class CommandResult : IRequestResult<object?>
         {
             Succeeded = false,
             Data = default!,
-            Error = error ?? DB.FORBIDDEN,
+            Error = error ?? EX.FORBIDDEN,
             StatusCode = HttpStatusCode.Forbidden
         };
     }

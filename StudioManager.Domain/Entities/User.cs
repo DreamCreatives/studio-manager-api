@@ -5,11 +5,11 @@ public sealed class User : EntityBase
     public string FirstName { get; private set; } = string.Empty;
     public string LastName { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
-    public Guid KeycloakId { get; private set; }
+    public string KeycloakId { get; private set; } = string.Empty;
 
     public string FullName => $"{FirstName} {LastName}";
     
-    public static User Create(string firstName, string lastName, string email, Guid keycloakId)
+    public static User Create(string firstName, string lastName, string email)
     {
         return new User
         {
@@ -17,7 +17,6 @@ public sealed class User : EntityBase
             FirstName = firstName,
             LastName = lastName,
             Email = email,
-            KeycloakId = keycloakId
         };
     }
     
@@ -26,6 +25,11 @@ public sealed class User : EntityBase
         FirstName = firstName;
         LastName = lastName;
         Email = email;
+    }
+    
+    public void SetNewIdentityId(string keycloakId)
+    {
+        KeycloakId = keycloakId;
     }
 
     #region EntityRelations

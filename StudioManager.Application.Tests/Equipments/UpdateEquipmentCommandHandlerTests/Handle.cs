@@ -80,8 +80,8 @@ public sealed class Handle : IntegrationTestBase
 
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
-            await ClearTableContentsForAsync<EquipmentType>(dbContext);
             await ClearTableContentsForAsync<Equipment>(dbContext);
+            await ClearTableContentsForAsync<EquipmentType>(dbContext);
             await AddEntitiesToTable(dbContext, equipmentType);
             await AddEntitiesToTable(dbContext, equipment);
         }
@@ -110,6 +110,8 @@ public sealed class Handle : IntegrationTestBase
 
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
+            await ClearTableContentsForAsync<Equipment>(dbContext);
+            await ClearTableContentsForAsync<EquipmentType>(dbContext);
             await AddEntitiesToTable(dbContext, equipmentType);
             await AddEntitiesToTable(dbContext, equipment);
         }

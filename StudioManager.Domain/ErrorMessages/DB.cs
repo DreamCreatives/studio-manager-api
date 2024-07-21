@@ -6,7 +6,6 @@ public static class DB
 {
     public const string HAS_OPEN_TRANSACTION = "Transaction is already open";
     public const string NO_OPEN_TRANSACTION = "Transaction has not been started";
-    public const string FORBIDDEN = "You do not have permission to perform this action";
 
 
 

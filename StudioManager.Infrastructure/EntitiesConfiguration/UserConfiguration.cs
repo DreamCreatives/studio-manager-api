@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using StudioManager.Domain.Entities;
 
-namespace StudioManager.Domain.EntitiesConfiguration;
+namespace StudioManager.Infrastructure.EntitiesConfiguration;
 
 [ExcludeFromCodeCoverage]
 public sealed class UserConfiguration : IEntityTypeConfiguration<User>

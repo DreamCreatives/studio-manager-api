@@ -16,7 +16,7 @@ public sealed class ReservationProjectionTests
         // Arrange
         var startDate = DateOnly.FromDateTime(DateTime.UtcNow);
         var equipment = Equipment.Create("Test Equipment", Guid.Empty, 10);
-        var user = User.Create("test", "user", "test@user.com", Guid.NewGuid());
+        var user = User.Create("test", "user", "test@user.com");
         var reservation = Reservation.Create(startDate, startDate, 10, equipment.Id, user.Id);
         reservation.GetType().GetProperty(nameof(Reservation.Equipment))!.SetValue(reservation, equipment);
         reservation.GetType().GetProperty(nameof(Reservation.User))!.SetValue(reservation, user);

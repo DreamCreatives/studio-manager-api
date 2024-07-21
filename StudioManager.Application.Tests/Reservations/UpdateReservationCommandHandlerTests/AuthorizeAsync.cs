@@ -45,7 +45,7 @@ public sealed class AuthorizeAsync : IntegrationTestBase
         result.StatusCode.Should().Be(ForbiddenStatusCode);
         result.Data.Should().BeNull();
         result.Error.Should().NotBeNullOrWhiteSpace();
-        result.Error.Should().Be(DB.FORBIDDEN);
+        result.Error.Should().Be(EX.FORBIDDEN);
     }
     
     [Test]
@@ -69,7 +69,7 @@ public sealed class AuthorizeAsync : IntegrationTestBase
         result.StatusCode.Should().Be(ForbiddenStatusCode);
         result.Data.Should().BeNull();
         result.Error.Should().NotBeNullOrWhiteSpace();
-        result.Error.Should().Be(DB.FORBIDDEN);
+        result.Error.Should().Be(EX.FORBIDDEN);
     }
     
     [Test]

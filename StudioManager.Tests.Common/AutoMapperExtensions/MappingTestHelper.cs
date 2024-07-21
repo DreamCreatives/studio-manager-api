@@ -16,7 +16,7 @@ public static class MappingTestHelper
     {
         return _mapperConfiguration ??= new MapperConfiguration(cfg =>
         {
-            cfg.AddMaps(typeof(DependencyInjection).Assembly);
+            cfg.AddMaps(typeof(ServiceCollectionExtension).Assembly);
         });
     }
 

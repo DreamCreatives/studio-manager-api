@@ -7,6 +7,7 @@ public abstract class EntityBase
 {
     [NotMapped]
     private readonly List<INotification> _entityEvents = [];
+    
     public Guid Id { get; protected init; }
 
     [NotMapped] public IReadOnlyCollection<INotification> DomainEvents => _entityEvents;

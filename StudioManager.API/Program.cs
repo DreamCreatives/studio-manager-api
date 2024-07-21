@@ -29,13 +29,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.RegisterInfrastructure(builder.Configuration);
-builder.Services.RegisterApplication();
+builder.Services.RegisterApplication(builder.Configuration);
 builder.Services.RegisterApi(builder.Configuration);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-// builder.Services.AddHostedService<FinishedReservationsBackgroundService>(); TODO: Implement redis cache for read lock
+// builder.Services.AddHostedService<FinishedReservationsBackgroundService>(); TODO: Implement redis cache for read lock + change logic to find reservations already returned
 
 var app = builder.Build();
 app.UseHttpsRedirection();

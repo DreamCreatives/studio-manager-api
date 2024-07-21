@@ -79,8 +79,8 @@ public class Handle : IntegrationTestBase
         var equipmentType = EquipmentType.Create("Test-Equipment-Type");
         await using (var dbContext = await _testDbContextFactory.CreateDbContextAsync(Cts.Token))
         {
-            await ClearTableContentsForAsync<EquipmentType>(dbContext);
             await ClearTableContentsForAsync<Equipment>(dbContext);
+            await ClearTableContentsForAsync<EquipmentType>(dbContext);
             await AddEntitiesToTable(dbContext, equipmentType);
         }
 

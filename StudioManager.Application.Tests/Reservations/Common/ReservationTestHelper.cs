@@ -10,8 +10,8 @@ internal static class ReservationTestHelper
 {
     internal static async Task<Equipment> AddEquipmentAsync(DbContextBase dbContext)
     {
-        await dbContext.EquipmentTypes.ExecuteDeleteAsync();
         await dbContext.Equipments.ExecuteDeleteAsync();
+        await dbContext.EquipmentTypes.ExecuteDeleteAsync();
         var equipmentType = EquipmentType.Create("Test Equipment Type");
         var equipment = Equipment.Create("Test Equipment", equipmentType.Id, 100);
 
@@ -25,7 +25,7 @@ internal static class ReservationTestHelper
     {
         await dbContext.Users.ExecuteDeleteAsync();
 
-        var user = User.Create("test", "user", "test@test.com", Guid.NewGuid());
+        var user = User.Create("test", "user", "test@test.com");
 
         await dbContext.Users.AddAsync(user);
         await dbContext.SaveChangesAsync();

@@ -21,6 +21,21 @@ public class QueryResult<T> : IRequestResult<T>
             StatusCode = HttpStatusCode.OK
         };
     }
+    
+    public static QueryResult<T> NotFound(object? id)
+    {
+        var error = id is null
+            ? $"[NOT FOUND] {nameof(T)} was not found"
+            : $"[NOT FOUND] {nameof(T)} with id {id} was not found";
+        
+        return new QueryResult<T>
+        {
+            Succeeded = false,
+            Data = default!,
+            Error = error,
+            StatusCode = HttpStatusCode.NotFound
+        };
+    }
 
     public static QueryResult<T> NotFound(string error)
     {

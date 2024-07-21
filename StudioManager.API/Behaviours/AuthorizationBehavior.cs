@@ -10,6 +10,7 @@ public sealed class AuthorizationBehavior<TRequest, TResponse>(
     IAuthorizationHandler<TRequest> authorizationHandler)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : ICommand
+    where TResponse : IRequestResult<CommandResult>
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
