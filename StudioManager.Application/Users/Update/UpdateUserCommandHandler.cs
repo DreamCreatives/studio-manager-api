@@ -17,14 +17,14 @@ public sealed class UpdateUserCommandHandler(
     {
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-        var exists = await dbContext.CheckIfSimilarExistsAsync(
+        var hasDuplicateEmail = await dbContext.CheckIfSimilarExistsAsync(
             UserFilterBuilder.New()
                 .WithEmail(request.User.Email)
                 .WithNotId(request.Id)
                 .Build(), 
             cancellationToken);
 
-        if (exists)
+        if (hasDuplicateEmail)
         {
             return CommandResult.Conflict($"User with email {request.User.Email} already exists");
         }

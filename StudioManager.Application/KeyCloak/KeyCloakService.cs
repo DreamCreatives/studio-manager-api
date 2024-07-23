@@ -1,5 +1,7 @@
-﻿using FS.Keycloak.RestApiClient.Api;
+﻿using System.Net;
+using FS.Keycloak.RestApiClient.Api;
 using FS.Keycloak.RestApiClient.Authentication.Flow;
+using FS.Keycloak.RestApiClient.Client;
 using FS.Keycloak.RestApiClient.Model;
 using Microsoft.Extensions.Logging;
 using StudioManager.Domain.Common.Results;
@@ -16,7 +18,7 @@ public sealed class KeyCloakService(ClientCredentialsFlow clientCredentials, ILo
     private static readonly string CurrentEnvironment = Environment.GetEnvironmentVariable(EnvironmentVariable) ?? DevelopmentEnvironment;
     private static readonly bool IsLocalEnvironment = CurrentEnvironment.Equals(LocalEnvironment, StringComparison.InvariantCultureIgnoreCase); // TODO: Maybe I should refactor this
     
-    public async Task AddUserAsync(User user, CancellationToken cancellationToken = default)
+    public async Task<CommandResult> AddUserAsync(User user, CancellationToken cancellationToken = default)
     {
         var identityUser = new UserRepresentation
         {
@@ -35,13 +37,23 @@ public sealed class KeyCloakService(ClientCredentialsFlow clientCredentials, ILo
                 }]
         };
         
-        await InvokeActionAsync(AsyncAction, cancellationToken);
+        return await InvokeActionAsync(AsyncAction, OnException, cancellationToken);
         
-        return;
-        
-        async Task AsyncAction(IUsersApiAsync usersApi,ClientCredentialsFlow credentials, CancellationToken ct)
+        async Task<CommandResult> AsyncAction(IUsersApiAsync usersApi, ClientCredentialsFlow credentials, CancellationToken ct)
         {
             await usersApi.PostUsersAsync(credentials.Realm, identityUser, ct);
+
+            return CommandResult.Success();
+        }
+
+        CommandResult OnException(Exception e)
+        {
+            return e switch
+            {
+                ApiException { ErrorCode: (int)HttpStatusCode.NotFound } => CommandResult.NotFound<UserRepresentation>(user.Email),
+                ApiException { ErrorCode: (int)HttpStatusCode.Conflict } ae => CommandResult.Conflict(ae.InnerException?.Message ?? ae.Message),
+                _ => CommandResult.UnexpectedError(e.InnerException?.Message ?? e.Message)
+            };
         }
     }
 
@@ -91,6 +103,37 @@ public sealed class KeyCloakService(ClientCredentialsFlow clientCredentials, ILo
             return CommandResult.Success();
         }
         
-        CommandResult OnException(Exception e) => CommandResult.UnexpectedError(e.InnerException?.Message ?? e.Message);
+        CommandResult OnException(Exception e)
+        {
+            return e switch
+            {
+                ApiException { ErrorCode: (int)HttpStatusCode.NotFound } => CommandResult.NotFound<UserRepresentation>(user.Email),
+                ApiException { ErrorCode: (int)HttpStatusCode.Conflict } ae => CommandResult.Conflict(ae.InnerException?.Message ?? ae.Message),
+                _ => CommandResult.UnexpectedError(e.InnerException?.Message ?? e.Message)
+            };
+        }
     }
+
+    public async Task<CommandResult> RemoveUserAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        return await InvokeActionAsync(AsyncAction, OnException, cancellationToken);
+        
+        async Task<CommandResult> AsyncAction(IUsersApiAsync usersApi, ClientCredentialsFlow credentials, CancellationToken ct)
+        {
+            await usersApi.DeleteUsersByUserIdAsync(credentials.Realm, userId, ct);
+
+            return CommandResult.Success();
+        }
+        
+        CommandResult OnException(Exception e)
+        {
+            return e switch
+            {
+                ApiException { ErrorCode: (int)HttpStatusCode.NotFound } => CommandResult.NotFound<UserRepresentation>(userId),
+                ApiException { ErrorCode: (int)HttpStatusCode.Conflict } ae => CommandResult.Conflict(ae.InnerException?.Message ?? ae.Message),
+                _ => CommandResult.UnexpectedError(e.InnerException?.Message ?? e.Message)
+            };
+        }
+    }
+    
 }

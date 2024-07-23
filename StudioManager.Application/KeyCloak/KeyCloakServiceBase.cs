@@ -1,9 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Net;
+using System.Runtime.CompilerServices;
 using FS.Keycloak.RestApiClient.Api;
 using FS.Keycloak.RestApiClient.Authentication.ClientFactory;
 using FS.Keycloak.RestApiClient.Authentication.Flow;
-using FS.Keycloak.RestApiClient.ClientFactory;
+using FS.Keycloak.RestApiClient.Client;
 using Microsoft.Extensions.Logging;
+using ApiClientFactory = FS.Keycloak.RestApiClient.ClientFactory.ApiClientFactory;
 
 namespace StudioManager.Application.KeyCloak;
 
@@ -22,8 +24,13 @@ public abstract class KeyCloakServiceBase(
             using var httpClient = AuthenticationHttpClientFactory.Create(clientCredentials);
 
             using var usersApi = ApiClientFactory.Create<UsersApi>(httpClient);
-            
-            return await asyncAction(usersApi, clientCredentials,  cancellationToken);
+
+            return await asyncAction(usersApi, clientCredentials, cancellationToken);
+        }
+        catch (ApiException e) when (e.ErrorCode == (int)HttpStatusCode.NotFound)
+        {
+            logger.LogError(e, "Not found. Error executing method {method}  Error: {Error}", callerMemberName, e.InnerException?.Message ?? e.Message);
+            return onException(e);
         }
         catch (Exception e)
         {
