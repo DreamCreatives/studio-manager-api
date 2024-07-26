@@ -31,13 +31,8 @@ public class TestDbContextFactory<TContext>(string? connectionString) : IDbConte
                 npgsql => { npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery); })
             .UseSnakeCaseNamingConvention();
 
-        var mediator = new Mock<IMediator>();
-        mediator.Setup(x => x.Publish(
-            It.IsAny<INotification>(),
-            It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-
         var dbContext =
-            (TDbContext)Activator.CreateInstance(typeof(TDbContext), dbContextOptionsBuilder.Options, mediator.Object)!;
+            (TDbContext)Activator.CreateInstance(typeof(TDbContext), dbContextOptionsBuilder.Options)!;
         return dbContext;
     }
 }
