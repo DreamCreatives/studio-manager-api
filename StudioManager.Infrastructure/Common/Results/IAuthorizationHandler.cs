@@ -1,4 +1,4 @@
-﻿namespace StudioManager.Domain.Common.Results;
+﻿namespace StudioManager.Infrastructure.Common.Results;
 
 public interface IAuthorizationHandler<in TCommand>
 {

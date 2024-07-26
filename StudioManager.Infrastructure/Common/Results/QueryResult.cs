@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
-namespace StudioManager.Domain.Common.Results;
+namespace StudioManager.Infrastructure.Common.Results;
 
 [ExcludeFromCodeCoverage]
 public class QueryResult<T> : IRequestResult<T>

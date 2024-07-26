@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using StudioManager.Domain.Entities;
@@ -10,8 +9,7 @@ namespace StudioManager.Infrastructure.Common;
 
 [ExcludeFromCodeCoverage]
 public abstract class DbContextBase(
-    DbContextOptions options,
-    IMediator mediator) : DbContext(options)
+    DbContextOptions options) : DbContext(options)
 {
     private IDbContextTransaction? _transaction;
     public DbSet<EquipmentType> EquipmentTypes { get; set; }
@@ -43,7 +41,6 @@ public abstract class DbContextBase(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await mediator.DispatchDomainEventsAsync(this);
         return await base.SaveChangesAsync(cancellationToken);
     }
 }

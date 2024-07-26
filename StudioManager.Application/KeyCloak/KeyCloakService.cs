@@ -4,20 +4,17 @@ using FS.Keycloak.RestApiClient.Authentication.Flow;
 using FS.Keycloak.RestApiClient.Client;
 using FS.Keycloak.RestApiClient.Model;
 using Microsoft.Extensions.Logging;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
+using StudioManager.Infrastructure.Common.Results;
+using StudioManager.Infrastructure.Configuration;
 
 namespace StudioManager.Application.KeyCloak;
 
-public sealed class KeyCloakService(ClientCredentialsFlow clientCredentials, ILogger<KeyCloakService> logger)
-    : KeyCloakServiceBase(clientCredentials, logger), IKeyCloakService
+public sealed class KeyCloakService(KeyCloakConfiguration keycloakConfiguration, ILogger<KeyCloakService> logger)
+    : KeyCloakServiceBase(keycloakConfiguration, logger), IKeyCloakService
 {
-    private const string EnvironmentVariable = "ASPNETCORE_ENVIRONMENT";
-    private const string LocalEnvironment = "Local";
-    private const string DevelopmentEnvironment = "Development";
-    private static readonly string CurrentEnvironment = Environment.GetEnvironmentVariable(EnvironmentVariable) ?? DevelopmentEnvironment;
-    private static readonly bool IsLocalEnvironment = CurrentEnvironment.Equals(LocalEnvironment, StringComparison.InvariantCultureIgnoreCase); // TODO: Maybe I should refactor this
-    
+    private readonly KeyCloakConfiguration _keycloakConfiguration = keycloakConfiguration;
+
     public async Task<CommandResult> AddUserAsync(User user, CancellationToken cancellationToken = default)
     {
         var identityUser = new UserRepresentation
@@ -26,14 +23,14 @@ public sealed class KeyCloakService(ClientCredentialsFlow clientCredentials, ILo
             LastName = user.LastName,
             Email = user.Email,
             Username = $"{user.FirstName}.{user.LastName}",
-            EmailVerified = IsLocalEnvironment,
-            Enabled = true,
+            EmailVerified = _keycloakConfiguration.EmailVerified,
+            Enabled = _keycloakConfiguration.SaveUserAsEnabled,
             Credentials = [
                 new CredentialRepresentation
                 {
                     Type = "password",
                     Value = Convert.ToBase64String(user.Id.ToByteArray()),
-                    Temporary = IsLocalEnvironment
+                    Temporary = _keycloakConfiguration.SaveUserAsEnabled
                 }]
         };
         
@@ -46,15 +43,7 @@ public sealed class KeyCloakService(ClientCredentialsFlow clientCredentials, ILo
             return CommandResult.Success();
         }
 
-        CommandResult OnException(Exception e)
-        {
-            return e switch
-            {
-                ApiException { ErrorCode: (int)HttpStatusCode.NotFound } => CommandResult.NotFound<UserRepresentation>(user.Email),
-                ApiException { ErrorCode: (int)HttpStatusCode.Conflict } ae => CommandResult.Conflict(ae.InnerException?.Message ?? ae.Message),
-                _ => CommandResult.UnexpectedError(e.InnerException?.Message ?? e.Message)
-            };
-        }
+        CommandResult OnException(Exception e) => BaseOnException(e, user.Email);
     }
 
     public async Task<UserRepresentation?> GetIdentityUserByEmail(string email, CancellationToken cancellationToken = default)
@@ -92,7 +81,7 @@ public sealed class KeyCloakService(ClientCredentialsFlow clientCredentials, ILo
             return CommandResult.NotFound<UserRepresentation>(user.KeycloakId);
         }
         
-        identityUser.UpdateUserValues(user, IsLocalEnvironment);
+        identityUser.UpdateUserValues(user, _keycloakConfiguration.SaveUserAsEnabled);
         
         return await InvokeActionAsync(AsyncAction, OnException, cancellationToken);
         
@@ -102,16 +91,8 @@ public sealed class KeyCloakService(ClientCredentialsFlow clientCredentials, ILo
 
             return CommandResult.Success();
         }
-        
-        CommandResult OnException(Exception e)
-        {
-            return e switch
-            {
-                ApiException { ErrorCode: (int)HttpStatusCode.NotFound } => CommandResult.NotFound<UserRepresentation>(user.Email),
-                ApiException { ErrorCode: (int)HttpStatusCode.Conflict } ae => CommandResult.Conflict(ae.InnerException?.Message ?? ae.Message),
-                _ => CommandResult.UnexpectedError(e.InnerException?.Message ?? e.Message)
-            };
-        }
+
+        CommandResult OnException(Exception e) => BaseOnException(e, user.Email);
     }
 
     public async Task<CommandResult> RemoveUserAsync(string userId, CancellationToken cancellationToken = default)
@@ -124,16 +105,18 @@ public sealed class KeyCloakService(ClientCredentialsFlow clientCredentials, ILo
 
             return CommandResult.Success();
         }
-        
-        CommandResult OnException(Exception e)
+
+        CommandResult OnException(Exception e) => BaseOnException(e, userId);
+    }
+    
+    private static CommandResult BaseOnException(Exception e, string identifier)
+    {
+        return e switch
         {
-            return e switch
-            {
-                ApiException { ErrorCode: (int)HttpStatusCode.NotFound } => CommandResult.NotFound<UserRepresentation>(userId),
-                ApiException { ErrorCode: (int)HttpStatusCode.Conflict } ae => CommandResult.Conflict(ae.InnerException?.Message ?? ae.Message),
-                _ => CommandResult.UnexpectedError(e.InnerException?.Message ?? e.Message)
-            };
-        }
+            ApiException { ErrorCode: (int)HttpStatusCode.NotFound } => CommandResult.NotFound<UserRepresentation>(identifier),
+            ApiException { ErrorCode: (int)HttpStatusCode.Conflict } ae => CommandResult.Conflict(ae.InnerException?.Message ?? ae.Message),
+            _ => CommandResult.UnexpectedError(e.InnerException?.Message ?? e.Message)
+        };
     }
     
 }

@@ -5,14 +5,24 @@ using FS.Keycloak.RestApiClient.Authentication.ClientFactory;
 using FS.Keycloak.RestApiClient.Authentication.Flow;
 using FS.Keycloak.RestApiClient.Client;
 using Microsoft.Extensions.Logging;
+using StudioManager.Infrastructure.Configuration;
 using ApiClientFactory = FS.Keycloak.RestApiClient.ClientFactory.ApiClientFactory;
 
 namespace StudioManager.Application.KeyCloak;
 
 public abstract class KeyCloakServiceBase(
-    ClientCredentialsFlow clientCredentials,
+    KeyCloakConfiguration keycloakConfiguration,
     ILogger<KeyCloakServiceBase> logger)
 {
+    private readonly ClientCredentialsFlow _clientCredentialsFlow = new()
+    {
+        KeycloakUrl = keycloakConfiguration.Url,
+        ClientId = keycloakConfiguration.ClientId,
+        ClientSecret = keycloakConfiguration.Secret,
+        Realm = keycloakConfiguration.Realm
+    };
+    
+    
     protected async Task<TResult> InvokeActionAsync<TResult>(
         Func<IUsersApiAsync, ClientCredentialsFlow, CancellationToken, Task<TResult>> asyncAction,
         Func<Exception, TResult> onException,
@@ -21,11 +31,11 @@ public abstract class KeyCloakServiceBase(
     {
         try
         {
-            using var httpClient = AuthenticationHttpClientFactory.Create(clientCredentials);
+            using var httpClient = AuthenticationHttpClientFactory.Create(_clientCredentialsFlow);
 
             using var usersApi = ApiClientFactory.Create<UsersApi>(httpClient);
 
-            return await asyncAction(usersApi, clientCredentials, cancellationToken);
+            return await asyncAction(usersApi, _clientCredentialsFlow, cancellationToken);
         }
         catch (ApiException e) when (e.ErrorCode == (int)HttpStatusCode.NotFound)
         {
@@ -36,25 +46,6 @@ public abstract class KeyCloakServiceBase(
         {
             logger.LogError(e, "Error executing method {method}  Error: {Error}", callerMemberName, e.InnerException?.Message ?? e.Message);
             return onException(e);
-        }
-    }
-
-    protected async Task InvokeActionAsync(
-        Func<IUsersApiAsync, ClientCredentialsFlow, CancellationToken, Task> asyncAction,
-        CancellationToken cancellationToken = default,
-        [CallerMemberName] string callerMemberName = "")
-    {
-        try
-        {
-            using var httpClient = AuthenticationHttpClientFactory.Create(clientCredentials);
-
-            using var usersApi = ApiClientFactory.Create<UsersApi>(httpClient);
-            
-            await asyncAction(usersApi, clientCredentials, cancellationToken);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Error executing method {method}  Error: {Error}", callerMemberName, e.InnerException?.Message ?? e.Message);
         }
     }
 }

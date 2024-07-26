@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using MediatR;
-using StudioManager.Domain.Common.Results;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.API.Behaviours;
 

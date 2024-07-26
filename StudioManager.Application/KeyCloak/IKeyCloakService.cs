@@ -1,6 +1,6 @@
 ﻿using FS.Keycloak.RestApiClient.Model;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.KeyCloak;
 

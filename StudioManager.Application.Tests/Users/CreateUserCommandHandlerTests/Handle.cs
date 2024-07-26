@@ -4,9 +4,9 @@ using NUnit.Framework;
 using StudioManager.API.Contracts.Users;
 using StudioManager.Application.KeyCloak;
 using StudioManager.Application.Users.Create;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Common.Results;
 using StudioManager.Tests.Common;
 using StudioManager.Tests.Common.DbContextExtensions;
 

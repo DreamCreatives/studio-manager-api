@@ -46,7 +46,7 @@ public sealed class Equipment : EntityBase
 
 
     public EquipmentType EquipmentType { get; set; } = default!;
-    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+    public ICollection<Reservation> Reservations { get; set; } = [];
 
 
 

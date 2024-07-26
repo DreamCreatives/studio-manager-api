@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using StudioManager.API.Contracts.Equipments;
 using StudioManager.API.Contracts.Pagination;
 using StudioManager.Application.DbContextExtensions;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Equipments.GetAll;
 

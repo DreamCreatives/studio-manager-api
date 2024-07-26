@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StudioManager.Application.Common;
 using StudioManager.Application.KeyCloak;
-using StudioManager.Domain.Common.Results;
+using StudioManager.Infrastructure.Common.Results;
 using StudioManager.Infrastructure.Configuration;
 
 namespace StudioManager.Application;
@@ -48,19 +48,11 @@ public static class ServiceCollectionExtension
         var authOptions = configuration.GetRequiredSection(KeyCloakConfiguration.SectionName).Get<KeyCloakConfiguration>();
     
         ArgumentNullException.ThrowIfNull(authOptions, nameof(authOptions));
-
-        var credentials = new ClientCredentialsFlow
-        {
-            KeycloakUrl = authOptions.Url,
-            ClientId = authOptions.ClientId,
-            ClientSecret = authOptions.Secret,
-            Realm = authOptions.Realm
-        };
         
         services.AddSingleton<IKeyCloakService>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<KeyCloakService>>();
-            return new KeyCloakService(credentials, logger);
+            return new KeyCloakService(authOptions, logger);
         });
     }
 }

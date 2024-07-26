@@ -1,6 +1,4 @@
-﻿using StudioManager.Notifications.Equipment;
-
-namespace StudioManager.Domain.Entities;
+﻿namespace StudioManager.Domain.Entities;
 
 public sealed class Reservation : EntityBase
 {
@@ -43,8 +41,6 @@ public sealed class Reservation : EntityBase
         int quantity,
         Guid equipmentId)
     {
-        AddDomainEvent(new EquipmentReservationChangedEvent(equipmentId, quantity, Quantity));
-
         StartDate = startDate;
         EndDate = endDate;
         Quantity = quantity;

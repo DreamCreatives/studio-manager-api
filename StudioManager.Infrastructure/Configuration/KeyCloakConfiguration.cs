@@ -14,6 +14,9 @@ public class KeyCloakConfiguration
     public string TokenUrl { get; init; } = string.Empty;
     public string Url { get; init; } = string.Empty;
     public string Realm { get; init; } = string.Empty;
+    public bool EmailVerified { get; init; }
+    public bool SaveUserAsEnabled { get; init; }
+    public bool RequireHttpsMetadata { get; init; }
 
     public Uri GetTokenUri()
     {
@@ -25,7 +28,7 @@ public class KeyCloakConfiguration
         return GetUri(AuthEndpoint);
     }
     
-    private Uri GetUri(string url)
+    private static Uri GetUri(string url)
     {
         if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
         {

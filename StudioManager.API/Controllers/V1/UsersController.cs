@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudioManager.API.Base;
 using StudioManager.API.Contracts.Pagination;
@@ -8,11 +10,12 @@ using StudioManager.Application.Users.Delete;
 using StudioManager.Application.Users.GetAll;
 using StudioManager.Application.Users.GetById;
 using StudioManager.Application.Users.Update;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Filters.Builders;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.API.Controllers.V1;
 
+[Authorize(Policy = BearerTokenDefaults.AuthenticationScheme)]
 public sealed class UsersController(ISender sender) : CoreController(sender)
 {
     [HttpPost]

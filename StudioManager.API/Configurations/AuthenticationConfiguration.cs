@@ -25,7 +25,7 @@ public static class AuthenticationConfiguration
             {
                 opt.Authority = authConfig.Authority;
                 opt.Audience = authConfig.ClientId;
-                opt.RequireHttpsMetadata = false; // TODO: Change to true in production
+                opt.RequireHttpsMetadata = authConfig.RequireHttpsMetadata;
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -45,7 +45,7 @@ public static class AuthenticationConfiguration
                 opt.GetClaimsFromUserInfoEndpoint = true;
                 opt.SaveTokens = true;
                 opt.Scope.Add("openid");
-                opt.RequireHttpsMetadata = false; // TODO: Change to true in production
+                opt.RequireHttpsMetadata = authConfig.RequireHttpsMetadata;
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,

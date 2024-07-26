@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.DbContextExtensions;
 using StudioManager.Application.KeyCloak;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Domain.Filters.Builders;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Users.Update;
 

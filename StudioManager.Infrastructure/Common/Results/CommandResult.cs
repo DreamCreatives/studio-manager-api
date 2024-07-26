@@ -2,7 +2,7 @@
 using System.Net;
 using StudioManager.Domain.ErrorMessages;
 
-namespace StudioManager.Domain.Common.Results;
+namespace StudioManager.Infrastructure.Common.Results;
 
 [ExcludeFromCodeCoverage]
 public sealed class CommandResult : IRequestResult<object?>

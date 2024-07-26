@@ -3,9 +3,9 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using StudioManager.API.Contracts.Common;
 using StudioManager.Domain.Common.EnumerableExtensions;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Filters;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Dropdowns.EquipmentTypes;
 

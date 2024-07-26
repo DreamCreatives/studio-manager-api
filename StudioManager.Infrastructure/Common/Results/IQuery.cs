@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace StudioManager.Domain.Common.Results;
+namespace StudioManager.Infrastructure.Common.Results;
 
 public interface IQuery<T> : IRequest<QueryResult<T>>;

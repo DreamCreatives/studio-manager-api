@@ -4,7 +4,7 @@ using FS.Keycloak.RestApiClient.Api;
 using FS.Keycloak.RestApiClient.Client;
 using FS.Keycloak.RestApiClient.Model;
 using NUnit.Framework;
-using StudioManager.Domain.Common.Results;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Tests.KeyCloak;
 

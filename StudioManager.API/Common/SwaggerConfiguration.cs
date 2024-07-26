@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.OpenApi.Models;
 using StudioManager.Infrastructure.Configuration;
 
@@ -71,8 +72,8 @@ public static class SwaggerConfiguration
                     {
                         Reference = new OpenApiReference
                         {
-                            Type=ReferenceType.SecurityScheme,
-                            Id="Bearer"
+                            Type = ReferenceType.SecurityScheme,
+                            Id = BearerTokenDefaults.AuthenticationScheme
                         }
                     },
                     Array.Empty<string>()

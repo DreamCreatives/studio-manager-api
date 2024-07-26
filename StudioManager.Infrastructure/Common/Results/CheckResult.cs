@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace StudioManager.Domain.Common.Results;
+namespace StudioManager.Infrastructure.Common.Results;
 
 [ExcludeFromCodeCoverage]
 public sealed class CheckResult<T>

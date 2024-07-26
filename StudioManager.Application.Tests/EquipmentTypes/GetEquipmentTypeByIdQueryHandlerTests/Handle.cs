@@ -2,9 +2,9 @@
 using NUnit.Framework;
 using StudioManager.API.Contracts.EquipmentTypes;
 using StudioManager.Application.EquipmentTypes.GetById;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Common.Results;
 using StudioManager.Tests.Common;
 using StudioManager.Tests.Common.DbContextExtensions;
 

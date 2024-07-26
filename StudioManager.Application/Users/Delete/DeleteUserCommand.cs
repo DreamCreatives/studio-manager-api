@@ -1,4 +1,4 @@
-﻿using StudioManager.Domain.Common.Results;
+﻿using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Users.Delete;
 

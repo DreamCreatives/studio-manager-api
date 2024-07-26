@@ -2,8 +2,8 @@
 using FluentAssertions;
 using FS.Keycloak.RestApiClient.Model;
 using NUnit.Framework;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Tests.KeyCloak;
 

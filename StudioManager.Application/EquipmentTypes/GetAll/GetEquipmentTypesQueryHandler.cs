@@ -2,8 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using StudioManager.API.Contracts.EquipmentTypes;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.EquipmentTypes.GetAll;
 

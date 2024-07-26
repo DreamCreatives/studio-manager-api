@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.API.Contracts.Reservations;
 using StudioManager.Application.DbContextExtensions;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Domain.ErrorMessages;
 using StudioManager.Domain.Filters;
 using StudioManager.Infrastructure.Common;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Reservations.Common;
 

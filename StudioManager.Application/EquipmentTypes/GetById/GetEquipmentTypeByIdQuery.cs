@@ -1,5 +1,5 @@
 ﻿using StudioManager.API.Contracts.EquipmentTypes;
-using StudioManager.Domain.Common.Results;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.EquipmentTypes.GetById;
 

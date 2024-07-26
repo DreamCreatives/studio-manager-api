@@ -3,9 +3,9 @@ using NUnit.Framework;
 using StudioManager.API.Contracts.Reservations;
 using StudioManager.Application.Reservations.GetById;
 using StudioManager.Application.Tests.Reservations.Common;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Common.Results;
 using StudioManager.Tests.Common;
 using StudioManager.Tests.Common.DbContextExtensions;
 

@@ -5,8 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.ErrorMessages;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.API.Base;
 

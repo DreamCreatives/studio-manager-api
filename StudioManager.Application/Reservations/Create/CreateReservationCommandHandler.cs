@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.Common;
 using StudioManager.Application.Reservations.Common;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Domain.ErrorMessages;
 using StudioManager.Infrastructure;
-using StudioManager.Notifications.Equipment;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Reservations.Create;
 
@@ -43,8 +42,7 @@ public sealed class CreateReservationCommandHandler(
             userId);
 
         await dbContext.Reservations.AddAsync(dbReservation, cancellationToken);
-
-        dbReservation.AddDomainEvent(new EquipmentReservedEvent(reservation.EquipmentId, reservation.Quantity));
+        
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return CommandResult.Success(dbReservation.Id);
