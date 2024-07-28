@@ -1,7 +1,9 @@
-﻿using StudioManager.Application.Common;
+﻿using System.Diagnostics.CodeAnalysis;
+using StudioManager.Application.Common;
 
 namespace StudioManager.API.Common;
 
+[ExcludeFromCodeCoverage]
 public sealed class TokenDecryptor(IHttpContextAccessor httpContextAccessor) : ITokenDecryptor
 {
     private const string ClientIdKey = "azp";

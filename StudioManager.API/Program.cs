@@ -35,8 +35,6 @@ builder.Services.RegisterApi(builder.Configuration);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-// builder.Services.AddHostedService<FinishedReservationsBackgroundService>(); TODO: Implement redis cache for read lock + change logic to find reservations already returned
-
 var app = builder.Build();
 app.UseHttpsRedirection();
 
@@ -60,11 +58,11 @@ app.UseSwaggerUI(options =>
             $"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
 
     var authOptions = app.Configuration.GetRequiredSection(KeyCloakConfiguration.SectionName).Get<KeyCloakConfiguration>();
-    
+
     ArgumentNullException.ThrowIfNull(authOptions, nameof(authOptions));
-    
+
     options.OAuthClientSecret(authOptions.Secret);
-    options.OAuthClientId(authOptions.ClientId);
+    options.OAuthClientId(authOptions.SwaggerClientId);
     options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
 });
 
