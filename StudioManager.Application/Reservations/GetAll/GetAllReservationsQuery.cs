@@ -1,7 +1,7 @@
 ﻿using StudioManager.API.Contracts.Pagination;
 using StudioManager.API.Contracts.Reservations;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Filters;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Reservations.GetAll;
 

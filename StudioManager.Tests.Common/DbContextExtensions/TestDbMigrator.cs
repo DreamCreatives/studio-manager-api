@@ -46,13 +46,8 @@ public class TestDbMigrator<TContext>
                 npgsql => { npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery); })
             .UseSnakeCaseNamingConvention();
 
-        var mediator = new Mock<IMediator>();
-        mediator.Setup(x => x.Publish(
-            It.IsAny<INotification>(),
-            It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-
         var dbContext =
-            (TContext)Activator.CreateInstance(typeof(TContext), dbContextOptionsBuilder.Options, mediator.Object)!;
+            (TContext)Activator.CreateInstance(typeof(TContext), dbContextOptionsBuilder.Options)!;
         return dbContext;
     }
 }

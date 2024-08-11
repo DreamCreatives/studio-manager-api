@@ -5,6 +5,7 @@ using StudioManager.API;
 using StudioManager.API.Common;
 using StudioManager.Application;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,18 +22,18 @@ builder.Services.AddCors(option =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.ConfigureSwagger();
+builder.Services.ConfigureSwagger(builder.Configuration);
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.RegisterInfrastructure(builder.Configuration);
-builder.Services.RegisterApplication();
-builder.Services.RegisterApi();
+builder.Services.RegisterApplication(builder.Configuration);
+builder.Services.RegisterApi(builder.Configuration);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
-
-// builder.Services.AddHostedService<FinishedReservationsBackgroundService>(); TODO: Implement redis cache for read lock
 
 var app = builder.Build();
 app.UseHttpsRedirection();
@@ -55,6 +56,14 @@ app.UseSwaggerUI(options =>
     foreach (var description in provider.ApiVersionDescriptions)
         options.SwaggerEndpoint(
             $"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+
+    var authOptions = app.Configuration.GetRequiredSection(KeyCloakConfiguration.SectionName).Get<KeyCloakConfiguration>();
+
+    ArgumentNullException.ThrowIfNull(authOptions, nameof(authOptions));
+
+    options.OAuthClientSecret(authOptions.Secret);
+    options.OAuthClientId(authOptions.SwaggerClientId);
+    options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
 });
 
 app.MapControllers();

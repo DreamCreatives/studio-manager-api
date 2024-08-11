@@ -88,22 +88,6 @@ public static class DB_FORMAT
 {
     #region Equipment
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public const string EQUIPMENT_QUANTITY_MISSING_WHEN_REMOVING =
-        "Cannot remove equipment, the initial count ({0}) is not equal to the current count ({1})";
-
     public const string EQUIPMENT_DUPLICATE_NAME_TYPE = "Equipment with name {0} and type {1} already exists";
     public const string EQUIPMENT_DOES_NOT_EXIST = "[NOT FOUND] Equipment with id '{0}' does not exist";
 
@@ -137,6 +121,7 @@ public static class DB_FORMAT
 
 
     public const string RESERVATION_NOT_FOUND = "[NOT FOUND] Reservation with id '{0}' does not exist";
+    public const string RESERVATION_INVALID_APP_ID = "UserId {0} is not valid application id.";
 
 
 

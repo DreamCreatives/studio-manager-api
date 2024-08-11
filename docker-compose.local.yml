@@ -1,0 +1,66 @@
+﻿volumes:
+  postgres_data:
+    driver: local
+
+services:
+  
+  #### STUDIOMANAGER DATABASE ####
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: P@ssw0rd
+      POSTGRES_DB: Keycloak
+    networks:
+      - keycloak_network
+    healthcheck:
+      test: 'pg_isready -U postgres --dbname=Keycloak'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./.containers/studiomanager-keycloak-db:/var/lib/postgresql/data
+    restart: unless-stopped
+  
+  
+  #### KEYCLOAK ####
+  
+  studiomanager.keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: studiomanager.keycloak
+    command: start
+    networks:
+      - keycloak_network
+    environment:
+      #KC_LOG_LEVEL: debug
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/Keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: P@ssw0rd
+    
+      QUARKUS_TRANSACTION_MANAGER_ENABLE_RECOVERY: true
+    ports:
+      - 8080:8080
+    links:
+      - postgres
+    depends_on:
+      postgres:
+        condition: service_started
+    volumes:
+      - ./.containers/realm.json:/opt/keycloak/data/import/realm.json
+    restart: unless-stopped
+
+networks:
+  keycloak_network:
+    driver: bridge

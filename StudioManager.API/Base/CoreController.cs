@@ -2,9 +2,11 @@
 using System.Net;
 using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.ErrorMessages;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.API.Base;
 
@@ -13,7 +15,7 @@ namespace StudioManager.API.Base;
 [Route("api/v{version:apiVersion}/[controller]")]
 [Produces("application/json", "application/problem+json")]
 [ExcludeFromCodeCoverage]
-//[Authorize(Policy = "AuthorizedUser")]
+[Authorize(Policy = BearerTokenDefaults.AuthenticationScheme)]
 public abstract class CoreController(ISender sender) : ControllerBase
 {
     internal async Task<IResult> SendAsync(IRequest<CommandResult> request)

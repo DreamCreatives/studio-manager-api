@@ -17,7 +17,7 @@ namespace StudioManager.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -33,11 +33,6 @@ namespace StudioManager.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("equipment_type_id");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image_url");
-
                     b.Property<int>("InitialQuantity")
                         .HasColumnType("integer")
                         .HasColumnName("initial_quantity");
@@ -47,15 +42,18 @@ namespace StudioManager.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("quantity");
-
                     b.HasKey("Id")
                         .HasName("pk_equipments");
 
-                    b.HasIndex("EquipmentTypeId")
+                    b.HasIndex(new[] { "EquipmentTypeId" }, "IX_Equipment_EquipmentTypeId")
                         .HasDatabaseName("ix_equipments_equipment_type_id");
+
+                    b.HasIndex(new[] { "Name" }, "IX_Equipment_Name")
+                        .HasDatabaseName("ix_equipments_name");
+
+                    b.HasIndex(new[] { "Name", "EquipmentTypeId" }, "IX_Equipment_Name_EquipmentTypeId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_equipments_name_equipment_type_id");
 
                     b.ToTable("equipments", (string)null);
                 });
@@ -74,6 +72,10 @@ namespace StudioManager.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_equipment_types");
+
+                    b.HasIndex(new[] { "Name" }, "IX_EquipmentType_Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_equipment_types_name");
 
                     b.ToTable("equipment_types", (string)null);
                 });
@@ -101,13 +103,66 @@ namespace StudioManager.Infrastructure.Migrations
                         .HasColumnType("date")
                         .HasColumnName("start_date");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_reservations");
 
-                    b.HasIndex("EquipmentId")
+                    b.HasIndex(new[] { "EquipmentId" }, "IX_Reservations_EquipmentId")
                         .HasDatabaseName("ix_reservations_equipment_id");
 
+                    b.HasIndex(new[] { "StartDate", "EndDate" }, "IX_Reservations_StartDate_EndDate")
+                        .HasDatabaseName("ix_reservations_start_date_end_date");
+
+                    b.HasIndex(new[] { "UserId" }, "IX_Reservations_UserId")
+                        .HasDatabaseName("ix_reservations_user_id");
+
                     b.ToTable("reservations", (string)null);
+                });
+
+            modelBuilder.Entity("StudioManager.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("KeycloakId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("keycloak_id");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("last_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_users");
+
+                    b.HasIndex(new[] { "Email" }, "IX_Users_Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_email");
+
+                    b.HasIndex(new[] { "KeycloakId" }, "IX_Users_KeycloakId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_keycloak_id");
+
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("StudioManager.Domain.Entities.Equipment", b =>
@@ -115,7 +170,7 @@ namespace StudioManager.Infrastructure.Migrations
                     b.HasOne("StudioManager.Domain.Entities.EquipmentType", "EquipmentType")
                         .WithMany("Equipments")
                         .HasForeignKey("EquipmentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_equipments_equipment_types_equipment_type_id");
 
@@ -131,7 +186,16 @@ namespace StudioManager.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_reservations_equipments_equipment_id");
 
+                    b.HasOne("StudioManager.Domain.Entities.User", "User")
+                        .WithMany("Reservations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_reservations_users_user_id");
+
                     b.Navigation("Equipment");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("StudioManager.Domain.Entities.Equipment", b =>
@@ -142,6 +206,11 @@ namespace StudioManager.Infrastructure.Migrations
             modelBuilder.Entity("StudioManager.Domain.Entities.EquipmentType", b =>
                 {
                     b.Navigation("Equipments");
+                });
+
+            modelBuilder.Entity("StudioManager.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618
         }

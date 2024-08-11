@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.DbContextExtensions;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Infrastructure;
-using StudioManager.Notifications.Equipment;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Reservations.Delete;
 
@@ -17,8 +16,7 @@ public sealed class DeleteReservationCommandHandler(
         var dbReservation = await dbContext.GetReservationAsync(request.Id, cancellationToken);
 
         if (dbReservation is null) return CommandResult.NotFound<Reservation>(request.Id);
-        dbReservation.AddDomainEvent(
-            new EquipmentReservationChangedEvent(dbReservation.EquipmentId, 0, dbReservation.Quantity));
+        
         dbContext.Reservations.Remove(dbReservation);
         await dbContext.SaveChangesAsync(cancellationToken);
         return CommandResult.Success();

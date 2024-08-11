@@ -2,9 +2,9 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using StudioManager.API.Contracts.Reservations;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.ErrorMessages;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Reservations.GetById;
 

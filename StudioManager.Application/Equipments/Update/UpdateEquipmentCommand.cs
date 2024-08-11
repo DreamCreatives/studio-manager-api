@@ -1,5 +1,5 @@
 ﻿using StudioManager.API.Contracts.Equipments;
-using StudioManager.Domain.Common.Results;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Equipments.Update;
 

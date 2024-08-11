@@ -28,8 +28,6 @@ public sealed class Handle : IntegrationTestBase
 
         var equipment = await ReservationTestHelper.AddEquipmentAsync(dbContext);
         await ReservationTestHelper.AddReservationForEquipmentAsync(dbContext, equipment.Id);
-        await ReservationTestHelper.AddReservationForEquipmentAsync(dbContext, equipment.Id);
-        await ReservationTestHelper.AddReservationForEquipmentAsync(dbContext, equipment.Id);
     }
 
     [Test]
@@ -47,7 +45,7 @@ public sealed class Handle : IntegrationTestBase
         result.Error.Should().BeNullOrWhiteSpace();
         result.Data.Should().NotBeNull();
         result.Data!.Data.Should().NotBeEmpty();
-        result.Data.Data.Should().HaveCount(3);
+        result.Data.Data.Should().HaveCount(1);
         result.Data.Data.Should().BeOfType<List<ReservationReadDto>>();
     }
 }

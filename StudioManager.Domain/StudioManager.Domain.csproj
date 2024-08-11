@@ -7,12 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MediatR.Contracts" Version="2.0.1"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\StudioManager.Notifications\StudioManager.Notifications.csproj"/>
+      <PackageReference Include="LinqKit" Version="1.3.0" />
     </ItemGroup>
 
 </Project>

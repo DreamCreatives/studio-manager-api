@@ -9,8 +9,8 @@ using StudioManager.Application.EquipmentTypes.Delete;
 using StudioManager.Application.EquipmentTypes.GetAll;
 using StudioManager.Application.EquipmentTypes.GetById;
 using StudioManager.Application.EquipmentTypes.Update;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Filters;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.API.Controllers.V1;
 

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudioManager.Application.Equipments.Common;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Entities;
 using StudioManager.Infrastructure;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.Application.Equipments.Create;
 

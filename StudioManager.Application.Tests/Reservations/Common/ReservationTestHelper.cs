@@ -10,8 +10,8 @@ internal static class ReservationTestHelper
 {
     internal static async Task<Equipment> AddEquipmentAsync(DbContextBase dbContext)
     {
-        await dbContext.EquipmentTypes.ExecuteDeleteAsync();
         await dbContext.Equipments.ExecuteDeleteAsync();
+        await dbContext.EquipmentTypes.ExecuteDeleteAsync();
         var equipmentType = EquipmentType.Create("Test Equipment Type");
         var equipment = Equipment.Create("Test Equipment", equipmentType.Id, 100);
 
@@ -21,6 +21,17 @@ internal static class ReservationTestHelper
         return equipment;
     }
 
+    internal static async Task<User> AddUserAsync(DbContextBase dbContext)
+    {
+        await dbContext.Users.ExecuteDeleteAsync();
+
+        var user = User.Create("test", "user", "test@test.com");
+
+        await dbContext.Users.AddAsync(user);
+        await dbContext.SaveChangesAsync();
+        return user;
+    }
+
     internal static async Task<Reservation> AddReservationForDetailsAsync(
         DbContextBase dbContext,
         DateOnly startDate,
@@ -28,12 +39,14 @@ internal static class ReservationTestHelper
         int? quantity = null)
     {
         var equipment = await AddEquipmentAsync(dbContext);
+        var user = await AddUserAsync(dbContext);
 
         var reservation = Reservation.Create(
             startDate,
             endDate,
             quantity ?? equipment.InitialQuantity,
-            equipment.Id);
+            equipment.Id,
+            user.Id);
 
         await dbContext.Reservations.AddAsync(reservation);
         await dbContext.SaveChangesAsync();
@@ -43,11 +56,13 @@ internal static class ReservationTestHelper
     internal static async Task AddReservationForEquipmentAsync(DbContextBase dbContext,
         Guid equipmentId)
     {
+        var user = await AddUserAsync(dbContext);
         var reservation = Reservation.Create(
             DateOnly.FromDateTime(DateTime.UtcNow),
             DateOnly.FromDateTime(DateTime.UtcNow),
             1,
-            equipmentId);
+            equipmentId,
+            user.Id);
 
         await dbContext.Reservations.AddAsync(reservation);
         await dbContext.SaveChangesAsync();
@@ -56,11 +71,13 @@ internal static class ReservationTestHelper
     internal static async Task<Reservation> AddReservationAsync(DbContextBase dbContext)
     {
         var equipment = await AddEquipmentAsync(dbContext);
+        var user = await AddUserAsync(dbContext);
         var reservation = Reservation.Create(
             DateOnly.FromDateTime(DateTime.UtcNow),
             DateOnly.FromDateTime(DateTime.UtcNow),
             1,
-            equipment.Id);
+            equipment.Id,
+            user.Id);
 
         await dbContext.Reservations.AddAsync(reservation);
         await dbContext.SaveChangesAsync();

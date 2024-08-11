@@ -9,8 +9,8 @@ using StudioManager.Application.Reservations.Delete;
 using StudioManager.Application.Reservations.GetAll;
 using StudioManager.Application.Reservations.GetById;
 using StudioManager.Application.Reservations.Update;
-using StudioManager.Domain.Common.Results;
 using StudioManager.Domain.Filters;
+using StudioManager.Infrastructure.Common.Results;
 
 namespace StudioManager.API.Controllers.V1;
 

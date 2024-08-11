@@ -14,6 +14,13 @@ postgres-data
 postgres-data/*
 .containers/*
 .containers
+appsettings.Local.json
+*/appsettings.Local.json
+/appsettings.Local.json
+*.idea/
+.idea/
+*.idea
+StudioManager.API/appsettings.Local.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
